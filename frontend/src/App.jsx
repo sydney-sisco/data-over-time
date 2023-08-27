@@ -5,6 +5,7 @@ import { SocketTest } from './components/SocketTest'
 import { ConnectionState } from './components/ConnectionState'
 import futureLogo from '/future.svg'
 import './App.css'
+import Record from './components/Record'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -48,6 +49,7 @@ function App() {
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
       </div>
+      <Record />
       <ApiTest />
       <SocketTest />
       <ConnectionState isConnected={ isConnected } />
