@@ -16,6 +16,7 @@ const port = process.env.PORT || 3001
 const APP_NAME = process.env.APP_NAME || 'webapp-template'
 
 require('./features/passport')(app);
+const { record } = require('./features/record');
 
 app.get('/api', (req, res) => {
   res.send('Hello World from API!')
@@ -26,8 +27,19 @@ app.get('/api/test', (req, res) => {
     text: 'You are connected to the backend! ✅',
     randomData: Math.random(),
   };
+  console.log(sampleData);
   res.send(sampleData);
 })
+
+app.post('/api/record', (req, res) => {
+  const data = req.body;
+  const result = record(data);
+  if (result) {
+    res.send(result);
+  } else {
+    res.status(500).send('Error saving data');
+  }
+});
 
 // Serve static files from the public folder
 app.use(express.static(path.join(__dirname, 'public')));
