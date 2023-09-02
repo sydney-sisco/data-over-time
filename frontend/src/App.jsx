@@ -28,7 +28,9 @@ function App() {
         </p>
       </div>
       <Record />
-      <ApiTest />
+      <ApiTest endpoint="/api/test" />
+      {/* <ApiTest endpoint="/api/test_not_found" /> */}
+      <ApiTest endpoint="/api/test_protected" />
     </>
   )
 }
