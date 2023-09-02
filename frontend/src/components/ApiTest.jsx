@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import styles from './ApiTest.module.css';
 
 export function ApiTest({ endpoint }) {
   const [apiResponse, setApiResponse] = useState('')
@@ -25,7 +26,7 @@ export function ApiTest({ endpoint }) {
     <div>
       <button onClick={testApi}>test connection to backend: {`${endpoint}`}</button>
       <p>{apiResponse}</p>
-      <p className="error">{apiError}</p>
+      <p className={styles.error}>{apiError}</p>
     </div>
   );
 };
