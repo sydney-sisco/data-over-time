@@ -52,6 +52,3 @@ app.get('*', (req, res) => {
 const server = app.listen(port, () => {
   console.log(`${APP_NAME} listening on port ${port}`)
 })
-
-const io = require('./utils/socket')(server);
-require('./features/socketPing')(io);
