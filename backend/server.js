@@ -41,6 +41,22 @@ app.post('/api/record', (req, res) => {
   }
 });
 
+function isAuth(req, res, next) {
+  if(req.isAuthenticated()) // This function is given by passport after the user logs in
+    return next();
+  else
+    res.status(401).send('You must be logged in to access this resource');
+}
+
+app.get('/api/test_protected', isAuth, (req, res) => {
+  const sampleData = {
+    text: 'You are authenticated to the backend! 🎉',
+    randomData: Math.random(),
+  };
+  console.log(sampleData);
+  res.send(sampleData);
+})
+
 // Serve static files from the public folder
 app.use(express.static(path.join(__dirname, 'public')));
 
