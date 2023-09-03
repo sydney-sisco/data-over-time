@@ -1,14 +1,15 @@
 import { useContext } from 'react';
 import { AuthContext } from '../AuthProvider';
+import axios from "axios";
 
-const Record = () => {
+const Record = ({ setData }) => {
   const { token } = useContext(AuthContext);
 
   const postData = async () => {
     const data = null;
 
     try {
-      await fetch('/api/data', {
+      const res = await fetch('/api/data', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -16,6 +17,16 @@ const Record = () => {
         },
         body: data ? JSON.stringify(data) : null,
       });
+
+      if (res.status === 200) {
+        console.log('Data posted successfully');
+
+        const responseData = await res.json();
+        console.log(responseData);
+
+        setData((prevData) => [...prevData, responseData.data]);
+
+      }
     } catch (error) {
       console.error("Ah, crap! We hit an error, dude: ", error);
     }

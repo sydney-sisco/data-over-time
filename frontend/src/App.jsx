@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import { AuthContext } from './AuthProvider';
 import { ApiTest } from './components/ApiTest'
 import futureLogo from '/future.svg'
@@ -8,9 +8,11 @@ import Login from './components/Login';
 import { Route, Link, Redirect } from "wouter";
 import Logout from './components/Logout';
 import Register from './components/Register';
+import DataList from './components/DataList';
 
 function App() {
   const { isLoggedIn, token } = useContext(AuthContext);
+  const [data, setData] = useState([]);
 
   return (
     <>
@@ -33,7 +35,8 @@ function App() {
       <Route path="/register"><Register/></Route>
       <Route path="/">
         {/* { !isLoggedIn && <Redirect to='/login' /> } */}
-        <Record />
+        <Record setData={setData} />
+        <DataList entries={data} />
       </Route>
 
       {/* <Record /> */}

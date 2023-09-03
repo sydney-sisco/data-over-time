@@ -74,7 +74,7 @@ app.post('/api/data', isAuth, async (req, res) => {
 
     res.json({
       success: true,
-      result: result
+      data: result
     });
 
   } catch (err) {
