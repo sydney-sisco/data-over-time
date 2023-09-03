@@ -6,7 +6,7 @@ const DataList = ({ entries }) => {
     <ul>
       {entries.map((entry, index) => (
         <li key={index}>
-          {new Date(entry.timestamp).toLocaleString()}
+          {entry.createdAt} - {entry.data}
         </li>
       ))}
     </ul>
