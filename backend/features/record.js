@@ -1,11 +1,7 @@
-const firestore = require('@google-cloud/firestore');
+const firestore = require('../utils/firestore')
 
 // save to a user's collection
 const saveData = async (dataObj, userId) => {
-
-  const db = new firestore.Firestore({
-    projectId: 'demo-test',
-  });
 
   const name = dataObj.name || null;
   // name = caffeine
@@ -24,7 +20,7 @@ const saveData = async (dataObj, userId) => {
   try {
     // const { text, deviceId } = thoughtData; // thought destructure here
     const deviceId = null;
-    const dataCollectionRef = db
+    const dataCollectionRef = firestore
       .collection('users')
       .doc(userId)
       .collection('data');
@@ -47,20 +43,9 @@ const saveData = async (dataObj, userId) => {
   }
 };
 
-const getData = async (userId) => {
-  const db = new firestore.Firestore({
-    projectId: 'demo-test',
-  });
-
-  const snapshot = await db.collection('data').get();
-};
-
 const getDataByDateModified = async (userId, lastSyncTime) => {
-  const db = new firestore.Firestore({
-    projectId: 'demo-test',
-  });
   try {
-    const dataRef = db
+    const dataRef = firestore
       .collection('users')
       .doc(userId)
       .collection('data')
