@@ -1,27 +1,32 @@
-import React from 'react';
+import { useContext } from 'react';
+import { AuthContext } from '../AuthProvider';
 
-class Record extends React.Component {
-  postData = async () => {
-    const data = {name: 'test from react'}; // Replace with your actual data
+const Record = () => {
+  const { token } = useContext(AuthContext);
+
+  const postData = async () => {
+    const data = null;
 
     try {
-      await fetch('/api/record', {
+      await fetch('/api/data', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+        body: data ? JSON.stringify(data) : null,
       });
     } catch (error) {
       console.error("Ah, crap! We hit an error, dude: ", error);
     }
   }
 
-  render () {
-    return (
-      <button onClick={this.postData}>
-        Click Me, If You Dare! 😉
-      </button>
-    );
-  }
+
+  return (
+    <button onClick={postData}>
+      Click Me, If You Dare! 😉
+    </button>
+  );
 }
 
 export default Record;

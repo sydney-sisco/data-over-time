@@ -5,7 +5,7 @@ import futureLogo from '/future.svg'
 import './App.css'
 import Record from './components/Record'
 import Login from './components/Login';
-import { Route, Link } from "wouter";
+import { Route, Link, Redirect } from "wouter";
 import Logout from './components/Logout';
 import Register from './components/Register';
 
@@ -15,9 +15,9 @@ function App() {
   return (
     <>
       <div>
-        <a href="https://github.com/sydney-sisco/webapp-template" target="_blank">
+        <Link href="/">
           <img src={futureLogo} className="logo" alt="future logo" />
-        </a>
+        </Link>
       </div>
       <h1>Data over Time</h1>
 
@@ -31,8 +31,12 @@ function App() {
 
       <Route path="/login"><Login/></Route>
       <Route path="/register"><Register/></Route>
+      <Route path="/">
+        {/* { !isLoggedIn && <Redirect to='/login' /> } */}
+        <Record />
+      </Route>
 
-      <Record />
+      {/* <Record /> */}
       <ApiTest endpoint="/api/test" />
       {/* <ApiTest endpoint="/api/test_not_found" /> */}
       <ApiTest endpoint="/api/test_protected" />
