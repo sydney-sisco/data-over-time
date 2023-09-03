@@ -99,7 +99,7 @@ app.get('/api/data', isAuth, async (req, res) => {
 
     res.json({
       success: true,
-      data: data
+      data: data,
     });
 
   } catch (err) {

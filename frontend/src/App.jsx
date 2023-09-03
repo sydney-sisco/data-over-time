@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from './AuthProvider';
 import { ApiTest } from './components/ApiTest'
 import futureLogo from '/future.svg'
@@ -13,6 +13,36 @@ import DataList from './components/DataList';
 function App() {
   const { isLoggedIn, token } = useContext(AuthContext);
   const [data, setData] = useState([]);
+
+  useEffect(() => {
+
+    if (!isLoggedIn) {
+      setData([]);
+      return;
+    }
+
+
+    const getData = async () => {
+      try {
+        const res = await fetch('/api/data', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+        });
+
+        if (res.status === 200) {
+          const responseData = await res.json();
+          setData(responseData.data);
+        }
+      } catch (error) {
+        console.error("Ah, crap! We hit an error, dude: ", error);
+      }
+    }
+
+    getData();
+  }, [token]);
+            
 
   return (
     <>

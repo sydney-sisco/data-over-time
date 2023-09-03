@@ -55,4 +55,29 @@ const getData = async (userId) => {
   const snapshot = await db.collection('data').get();
 };
 
-module.exports = { saveData, getData };
+const getDataByDateModified = async (userId, lastSyncTime) => {
+  const db = new firestore.Firestore({
+    projectId: 'demo-test',
+  });
+  try {
+    const dataRef = db
+      .collection('users')
+      .doc(userId)
+      .collection('data')
+      // .where('updatedAt', '>', lastSyncTime)
+      .orderBy('updatedAt', 'desc');
+    const snapshot = await dataRef.get();
+    const data = [];
+    snapshot.forEach((doc) => {
+      data.push({
+        ...doc.data(),
+        id: doc.id,
+      });
+    });
+    return data;
+  } catch (error) {
+    console.error('Error retrieving data:', error);
+  }
+};
+
+module.exports = { saveData, getData: getDataByDateModified };
