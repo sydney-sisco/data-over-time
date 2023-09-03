@@ -32,7 +32,10 @@ const record = async (dataObj) => {
 
   const savedObj = await db.collection('data').add(document)
 
-  return savedObj;
+  return { 
+    ...document,
+    id: savedObj.id,
+  };
 };
 
 module.exports = { record };
