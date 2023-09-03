@@ -1,7 +1,7 @@
 {
-  "short_name": "Web App Template",
-  "name": "Web App Template",
-  "description": "A starting point.",
+  "short_name": "DoT",
+  "name": "Data over Time",
+  "description": "Track yourself using data over time",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
