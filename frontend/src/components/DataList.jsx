@@ -6,7 +6,7 @@ const DataList = ({ entries }) => {
     <ul>
       {entries.map((entry, index) => (
         <li key={index}>
-          {entry.createdAt} - {entry.data}
+          {entry.createdAt} - {entry.name}
         </li>
       ))}
     </ul>

@@ -1,12 +1,15 @@
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import { AuthContext } from '../AuthProvider';
 import axios from "axios";
 
 const Record = ({ setData }) => {
   const { token } = useContext(AuthContext);
+  const [name, setName] = useState([]);
 
   const postData = async () => {
-    const data = null;
+    const data = {
+      name,
+    };
 
     try {
       const res = await fetch('/api/data', {
@@ -24,7 +27,7 @@ const Record = ({ setData }) => {
         const responseData = await res.json();
         console.log(responseData);
 
-        setData((prevData) => [...prevData, responseData.data]);
+        setData((prevData) => [responseData.data, ...prevData]);
 
       }
     } catch (error) {
@@ -34,9 +37,17 @@ const Record = ({ setData }) => {
 
 
   return (
-    <button onClick={postData}>
-      Click Me, If You Dare! 😉
-    </button>
+    <>
+      <h2>Record Data</h2>
+      <label>
+        Name:
+        <input type="text" onChange={e => setName(e.target.value)} />
+      </label>
+
+      <button onClick={postData}>
+        Click Me, If You Dare! 😉
+      </button>
+    </>
   );
 }
 
