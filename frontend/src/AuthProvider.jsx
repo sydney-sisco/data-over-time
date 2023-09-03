@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-
+import { useLocalStorage } from './hooks/useLocalStorage';
 // Create Context
 const AuthContext = React.createContext();
 
 // AuthProvider Component that wraps your app in App.js
 const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useLocalStorage("token", null);
   const isLoggedIn = !!token;
 
   const logout = () => {
