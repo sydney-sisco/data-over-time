@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useLocation } from "wouter";
 
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [location, setLocation] = useLocation();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,8 +18,10 @@ function Register() {
     axios.post('/api/register', data)
       .then(res => {
         if (res.status === 200) {
+          console.log('Registration successful');
           // Handle successful registration here,
           // you might want to redirect the user to the login page
+          setLocation("/login");
         }
       });
   }
