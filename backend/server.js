@@ -3,6 +3,7 @@ const express = require('express')
 const app = express()
 app.use(express.json());
 var session = require('express-session');
+const jwt = require('jsonwebtoken');
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -42,10 +43,16 @@ app.post('/api/record', (req, res) => {
 });
 
 function isAuth(req, res, next) {
-  if(req.isAuthenticated()) // This function is given by passport after the user logs in
-    return next();
-  else
-    res.status(401).send('You must be logged in to access this resource');
+  const token = req.headers['authorization'].split(' ')[1];
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.sendStatus(403);
+    }
+
+    req.user = user;
+    next();
+  });
 }
 
 app.get('/api/test_protected', isAuth, (req, res) => {
