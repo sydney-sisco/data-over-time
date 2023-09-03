@@ -17,7 +17,7 @@ const port = process.env.PORT || 3001
 const APP_NAME = process.env.APP_NAME || 'webapp-template'
 
 require('./features/passport')(app);
-const { record } = require('./features/record');
+const { saveData, getData } = require('./features/record');
 
 app.get('/api', (req, res) => {
   res.send('Hello World from API!')
@@ -61,6 +61,8 @@ app.get('/api/test_protected', isAuth, (req, res) => {
 // add new data
 app.post('/api/data', isAuth, async (req, res) => {
   const data = req.body;
+  // get user id from session
+  const userId = req.user.username;
 
   if (!data) {
     return res.status(400).json({
@@ -70,7 +72,7 @@ app.post('/api/data', isAuth, async (req, res) => {
   }
 
   try {
-    const result = await record(data);
+    const result = await saveData(data, userId);
 
     res.json({
       success: true,
@@ -88,8 +90,12 @@ app.post('/api/data', isAuth, async (req, res) => {
 
 // Listing data
 app.get('/api/data', isAuth, async (req, res) => {
+
+  // get user id from session
+  const userId = req.user.username;
+
   try {
-    const data = await getData();
+    const data = await getData(userId);
 
     res.json({
       success: true,

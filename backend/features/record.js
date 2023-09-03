@@ -1,41 +1,58 @@
 const firestore = require('@google-cloud/firestore');
 
-const record = async (dataObj) => {
+// save to a user's collection
+const saveData = async (dataObj, userId) => {
 
-  const name = dataObj.name;
+  const db = new firestore.Firestore({
+    projectId: 'demo-test',
+  });
+
+  const name = dataObj.name || null;
   // name = caffeine
 
   // TODO: data can be an array of objects
-  const data = dataObj.data;
+  const data = dataObj.data || null;
   // {
   //  "units": "mg",
   //  "value": 160,
   //  "type": "rockstar pure zero punch",
   // }
 
-  const document = {
-    timestamp: new Date().toISOString(),
-  };
+  // generates a UTC timestamp in the format of YYYY-MM-DDTHH:MM:SSZ
+  const createdAt = new Date().toISOString();
 
-  if (name) {
-    document.name = name;
+  try {
+    // const { text, deviceId } = thoughtData; // thought destructure here
+    const deviceId = null;
+    const dataCollectionRef = db
+      .collection('users')
+      .doc(userId)
+      .collection('data');
+    const docRef = await dataCollectionRef.add({
+      data,
+      name,
+      deviceId,
+      createdAt: createdAt,
+      updatedAt: createdAt,
+    });
+    console.log('Data added successfully with ID:', docRef.id);
+    return {
+      ...dataObj,
+      id: docRef.id,
+      createdAt: createdAt,
+      updatedAt: createdAt,
+    };
+  } catch (error) {
+    console.error('Error adding data:', error);
   }
+};
 
-  if (data) {
-    document.data = data;
-  }
-
-  // Save the data to Firestore
+const getData = async (userId) => {
   const db = new firestore.Firestore({
     projectId: 'demo-test',
   });
 
-  const savedObj = await db.collection('data').add(document)
-
-  return { 
-    ...document,
-    id: savedObj.id,
-  };
+  const snapshot = await db.collection('data').get();
 };
 
-module.exports = { record };
+module.exports = { saveData, getData };
