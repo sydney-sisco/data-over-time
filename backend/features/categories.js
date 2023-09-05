@@ -1,5 +1,46 @@
 const firestore = require('../utils/firestore')
 
+const defaultCategories = [
+  {
+    name: "Caffeine",
+    fields: ["Caffeine Content (mg)", "Source"],
+    presets: [
+      {
+        name: "Office Coffee",
+        values: {"Caffeine Content (mg)": 100, "Source": "Coffee"}
+      },
+      {
+        name: "Rockstar",
+        values: {"Caffeine Content (mg)": 160, "Source": "Energy Drink"}
+      },
+    ]  
+  },
+  {
+    name: "Sleep",
+    fields: ["Duration (hrs)", "Quality"],
+    presets: [
+      {
+        name: "Good Sleep",
+        values: {"Duration (hrs)": 8, "Quality": "Good"}
+      },
+      {
+        name: "Bad Sleep",
+        values: {"Duration (hrs)": 8, "Quality": "Bad"}
+      },
+    ]
+  },
+  {
+    name: "Exercise",
+  },
+];
+
+const saveDefaultCategories = async (userId) => {
+  defaultCategories.forEach(category => {
+    // saveCategory is a function that adds a category to a user's account
+    saveCategory(category, userId);
+  });
+};
+
 const getCategoriesForUser = async (userId) => {
   try {
     const categoriesRef = firestore
@@ -82,4 +123,5 @@ module.exports = {
   getCategoriesForUser,
   updateCategory,
   deleteCategory,
+  saveDefaultCategories,
 };

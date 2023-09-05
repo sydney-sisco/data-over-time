@@ -5,6 +5,8 @@ const db = require('../utils/firestore');
 const User = db.collection('users');
 const jwt = require('jsonwebtoken');
 
+const { saveDefaultCategories } =  require('./categories');
+
 passport.use(
   new LocalStrategy({ usernameField: 'username' }, (username, password, done) => {
     const user = User.doc(username).get()
@@ -82,6 +84,7 @@ module.exports = (app) => {
 
           User.doc(user.id).set(user)
             .then(() => {
+              saveDefaultCategories(user.id);
               res.status(200).json({ success: true });
             })
             .catch((err) => {
