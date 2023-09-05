@@ -3,47 +3,44 @@ import { AuthContext } from './AuthProvider';
 import { ApiTest } from './components/ApiTest'
 import futureLogo from '/future.svg'
 import './App.css'
-import Record from './components/Record'
 import Login from './components/Login';
 import { Route, Link, Redirect } from "wouter";
 import Logout from './components/Logout';
 import Register from './components/Register';
 import DataList from './components/DataList';
+import LogData from './components/LogData';
+import Category from './components/Category';
+
+import {
+  getCategoriesForList,
+} from './helpers/selectors';
+import useApplicationData from "./hooks/useApplicationData.js";
 
 function App() {
   const { isLoggedIn, token } = useContext(AuthContext);
   const [data, setData] = useState([]);
 
-  useEffect(() => {
+  const {
+    state,
+    saveCategory,
+    deleteCategory,
+    submitData,
+  } = useApplicationData();
 
-    if (!isLoggedIn) {
-      setData([]);
-      return;
+  const categories = getCategoriesForList(state).map(
+    category => {
+      return (
+        <Category
+          key={category.id}
+          id={category.id}
+          category={category}
+          saveCategory={saveCategory}
+          deleteCategory={deleteCategory}
+        />
+      );
     }
-
-
-    const getData = async () => {
-      try {
-        const res = await fetch('/api/data', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-          },
-        });
-
-        if (res.status === 200) {
-          const responseData = await res.json();
-          setData(responseData.data);
-        }
-      } catch (error) {
-        console.error("Ah, crap! We hit an error, dude: ", error);
-      }
-    }
-
-    getData();
-  }, [token]);
-            
-
+  )
+  
   return (
     <>
       <div>
@@ -55,28 +52,43 @@ function App() {
 
       { isLoggedIn
         ? <Logout />
-        : <div>
-            <Link href="/login">Login</Link>
-            <Link href="/register">Register</Link>
+        : <div className="nav">
+            <Link href="/login"><button>Login</button></Link>
+            <Link href="/register"><button>Register</button></Link>
           </div>
       }
 
       <Route path="/login"><Login/></Route>
       <Route path="/register"><Register/></Route>
+      <Route path="/categories">
+        <Link href="/"><button>Back</button></Link>
+        {categories}
+        <Category
+          key="placeholder"
+          id={null}
+          category={null}
+          saveCategory={saveCategory}
+          deleteCategory={deleteCategory}
+        />
+      </Route>
       <Route path="/">
-        {/* { !isLoggedIn && <Redirect to='/login' /> } */}
-        <Record setData={setData} />
-        <DataList entries={data} />
+        { isLoggedIn ?
+          <>
+          <LogData categories={getCategoriesForList(state)} setData={setData} submitData={submitData}/>
+          <DataList entries={state.entries} />
+          </>
+          :
+          <p>You must be logged in to continue.</p>
+        }
       </Route>
 
-      {/* <Record /> */}
-      <ApiTest endpoint="/api/test" />
+      {/* <ApiTest endpoint="/api/test" /> */}
       {/* <ApiTest endpoint="/api/test_not_found" /> */}
-      <ApiTest endpoint="/api/test_protected" />
-      { isLoggedIn
+      {/* <ApiTest endpoint="/api/test_protected" /> */}
+      {/* { isLoggedIn
         ? <p>You are logged in! 🎉 token: <b>{token.substring(0, 20)}</b></p>
         : <p>You are not logged in.</p>
-      }
+      } */}
     </>
   )
 }
