@@ -1,13 +1,11 @@
 import { useState, useContext } from 'react';
 import axios from "axios";
 import { AuthContext } from '../AuthProvider';
-import { useLocation } from "wouter";
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useContext(AuthContext);
-  const [location, setLocation] = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,8 +18,6 @@ function Login() {
     const res = await axios.post('/api/login', data);
     if (res.status === 200) {
       console.log('Login successful');
-      // setToken(res.data.token);
-      // setLocation("/");
       login(res.data.token);
     }
   };
@@ -37,7 +33,7 @@ function Login() {
           Password:
           <input type="password" onChange={e => setPassword(e.target.value)} />
         </label>
-        <button type="submit">Submit</button>
+        <button type="submit">Login</button>
       </form>
     </div>
   );
