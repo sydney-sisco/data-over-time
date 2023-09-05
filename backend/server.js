@@ -17,7 +17,17 @@ const port = process.env.PORT || 3001
 const APP_NAME = process.env.APP_NAME || 'webapp-template'
 
 require('./features/passport')(app);
-const { saveData, getData } = require('./features/record');
+const {
+  saveData,
+  getData
+} = require('./features/record');
+
+const {
+  saveCategory,
+  getCategoriesForUser,
+  updateCategory,
+  deleteCategory,
+} = require('./features/categories');
 
 app.get('/api', (req, res) => {
   res.send('Hello World from API!')
@@ -135,6 +145,120 @@ app.delete('/api/data/:id', isAuth, async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error deleting data: " + err.message
+    });
+  }
+});
+
+// Listing categories
+app.get('/api/categories', isAuth, async (req, res) => {
+
+  // get user id from session
+  const userId = req.user.username;
+
+  try {
+    const categories = await getCategoriesForUser(userId);
+
+    res.json({
+      success: true,
+      data: categories,
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Error retrieving categories: " + err.message
+    });
+  }
+});
+
+// add new category
+app.post('/api/categories', isAuth, async (req, res) => {
+  const category = req.body;
+  // get user id from session
+  const userId = req.user.username;
+
+  if (!category) {
+    return res.status(400).json({
+      success: false,
+      message: "Missing request body"
+    });
+  }
+
+  try {
+    const result = await saveCategory(category, userId);
+
+    res.json({
+      success: true,
+      data: result
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Error saving category: " + err.message
+    });
+  }
+});
+
+// update category
+app.put('/api/categories/:id', isAuth, async (req, res) => {
+  const id = req.params.id;
+  const category = req.body;
+  // get user id from session
+  const userId = req.user.username;
+
+  if (!id || !category) {
+    return res.status(400).json({
+      success: false,
+      message: "Missing request body"
+    });
+  }
+
+  try {
+    const result = await updateCategory(id, category, userId);
+
+    res.json({
+      success: true,
+      data: result
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Error updating category: " + err.message
+    });
+  }
+});
+
+// delete category
+app.delete('/api/categories/:id', isAuth, async (req, res) => {
+  const id = req.params.id;
+  // get user id from session
+  const userId = req.user.username;
+
+  if (!id) {
+    return res.status(400).json({
+      success: false,
+      message: "Missing id in the request URL"
+    });
+  }
+
+  try {
+    await deleteCategory(id, userId);
+
+    res.json({
+      success: true,
+      message: "Category deleted successfully"
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Error deleting category: " + err.message
     });
   }
 });
