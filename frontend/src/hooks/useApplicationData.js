@@ -162,47 +162,52 @@ export default function useApplicationData() {
   };
 
   useEffect(() => {
-    if (!isLoggedIn) return;
-      const getData = async () => {
-        try {
-          const res = await fetch('/api/data', {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token,
-            },
-          });
+    if (!isLoggedIn) {
+      // TODO: clear entries as well.
+      dispatch({ type: SET_APPLICATION_DATA, categories: null });
+      return;
+    }
   
-          if (res.status === 200) {
-            const responseData = await res.json();
-            // setData(responseData.data);
-            dispatch({ type: SET_ENTRIES_DATA, entries: responseData.data });
-          }
-        } catch (error) {
-          console.error("Ah, crap! We hit an error, dude: ", error);
-        }
-      }
+    const getData = async () => {
+      try {
+        const res = await fetch('/api/data', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+        });
 
-      const getCategories = async () => {
-        try {
-          const res = await fetch('/api/categories', {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token,
-            },
-          });
-
-          if (res.status === 200) {
-            const responseData = await res.json();
-            console.log("setting categories: ", responseData.data);
-            dispatch({ type: SET_CATEGORIES, categories: responseData.data });
-          }
-        } catch (error) {
-          console.error("Ah, crap! We hit an error, dude: ", error);
+        if (res.status === 200) {
+          const responseData = await res.json();
+          // setData(responseData.data);
+          dispatch({ type: SET_ENTRIES_DATA, entries: responseData.data });
         }
+      } catch (error) {
+        console.error("Ah, crap! We hit an error, dude: ", error);
       }
-  
-      getData();
-      getCategories();
+    }
+
+    const getCategories = async () => {
+      try {
+        const res = await fetch('/api/categories', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+        });
+
+        if (res.status === 200) {
+          const responseData = await res.json();
+          console.log("setting categories: ", responseData.data);
+          dispatch({ type: SET_CATEGORIES, categories: responseData.data });
+        }
+      } catch (error) {
+        console.error("Ah, crap! We hit an error, dude: ", error);
+      }
+    }
+
+    getData();
+    getCategories();
 
   }, [isLoggedIn]);
 
@@ -258,7 +263,5 @@ export default function useApplicationData() {
   //   });
   // }, []);
 
-
-  // return { state, setDay, bookInterview, cancelInterview };
   return { state, deleteCategory, saveCategory, submitData }
 }
