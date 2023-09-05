@@ -16,6 +16,24 @@ const defaultCategories = [
     ]  
   },
   {
+    name: "Nicotine",
+    fields: ["Nicotine Content (mg)", "Source"],
+    presets: [
+      {
+        name: "Vape",
+        values: {"Nicotine Content (mg)": 50, "Source": "Vape"}
+      },
+      {
+        name: "Cigarette",
+        values: {"Nicotine Content (mg)": 20, "Source": "Cigarette"}
+      },
+      {
+        name: "Gum",
+        values: {"Nicotine Content (mg)": 4, "Source": "Gum"}
+      },
+    ]
+  },
+  {
     name: "Sleep",
     fields: ["Duration (hrs)", "Quality"],
     presets: [
