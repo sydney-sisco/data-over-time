@@ -4,6 +4,7 @@ import reducer, {
   SET_APPLICATION_DATA,
   SET_ENTRIES_DATA,
   SET_CATEGORY,
+  SET_CATEGORIES,
   ADD_ENTRY,
 } from "../reducers/application";
 
@@ -54,7 +55,7 @@ const initialState = {
 };
 
 export default function useApplicationData() {
-  const [state, dispatch] = useReducer(reducer, initialStateTest);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const { isLoggedIn, token } = useContext(AuthContext);
 
   const generateFakeId = async () => {
@@ -63,12 +64,75 @@ export default function useApplicationData() {
   };
 
   const deleteCategory = async (id) => {
-    await dispatch({ type: SET_CATEGORY, id, category: null });
+
+    console.log('deleting category: ', id);
+    
+    try {
+      const res = await fetch(`/api/categories/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+      });
+
+      if (res.status === 200) {
+        console.log('Category deleted successfully');
+
+        await dispatch({ type: SET_CATEGORY, id, category: null });
+      }
+    } catch (error) {
+      console.error("Ah, crap! We hit an error, dude: ", error);
+    }
   };
 
   const saveCategory = async (id, category) => {
-    const idToUse = id || await generateFakeId();
-    await dispatch({ type: SET_CATEGORY, id:idToUse, category });
+    // const idToUse = id || await generateFakeId();
+    if(!id) {
+      try {
+        console.log('saving category: ', category, 'with id: ', id);
+        const res = await fetch('/api/categories', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+          body: JSON.stringify(category),
+        });
+
+        if (res.status === 200) {
+          const responseData = await res.json();
+          console.log('response from saveCategory: ', responseData.data);
+
+          await dispatch({ type: SET_CATEGORY, id: responseData.data.id, category: responseData.data });
+        }
+      }
+      catch (error) {
+        console.error("Ah, crap! We hit an error, dude: ", error);
+      }
+    } else {
+      try {
+        console.log('updating category: ', category, 'with id: ', id);
+        const res = await fetch(`/api/categories/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+          body: JSON.stringify(category),
+        });
+
+        if (res.status === 200) {
+          const responseData = await res.json();
+          console.log(responseData);
+
+          await dispatch({ type: SET_CATEGORY, id, category });
+        }
+      }
+      catch (error) {
+        console.error("Ah, crap! We hit an error, dude: ", error);
+      }
+    }
   };
 
   const submitData = async (data) => {
@@ -117,8 +181,28 @@ export default function useApplicationData() {
           console.error("Ah, crap! We hit an error, dude: ", error);
         }
       }
+
+      const getCategories = async () => {
+        try {
+          const res = await fetch('/api/categories', {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token,
+            },
+          });
+
+          if (res.status === 200) {
+            const responseData = await res.json();
+            console.log("setting categories: ", responseData.data);
+            dispatch({ type: SET_CATEGORIES, categories: responseData.data });
+          }
+        } catch (error) {
+          console.error("Ah, crap! We hit an error, dude: ", error);
+        }
+      }
   
       getData();
+      getCategories();
 
   }, [isLoggedIn]);
 

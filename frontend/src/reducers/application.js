@@ -1,5 +1,6 @@
 export const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
 export const SET_CATEGORY = "SET_CATEGORY";
+export const SET_CATEGORIES = "SET_CATEGORIES";
 export const SET_ENTRIES_DATA = "SET_ENTRIES_DATA";
 export const ADD_ENTRY = "ADD_ENTRY";
 
@@ -25,12 +26,15 @@ export default function reducer(state, action) {
         };
       }
 
+    case SET_CATEGORIES:
+      return { ...state, categories: action.categories };
+
     case SET_ENTRIES_DATA:
       return { ...state, entries: action.entries };
 
     case ADD_ENTRY:
       return { ...state, entries: [action.entry, ...state.entries] };
-      
+
     default:
       throw new Error(
         `Tried to reduce with unsupported action type: ${action.type}`
