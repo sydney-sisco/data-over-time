@@ -9,7 +9,7 @@ const CategoryButton = ({ category, onClick }) => {
   )
 }
 
-const LogData = ({ categories, setData, submitData }) => {
+const LogData = ({ categories, submitData }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [fieldValues, setFieldValues] = useState({});
 
@@ -52,12 +52,12 @@ const LogData = ({ categories, setData, submitData }) => {
         <div>
           <h2>Selected Category: {selectedCategory.name}</h2>
           
-          {/* <h3>Presets</h3>
-          {trackingCategories[selectedCategory].presets.map(preset => (
+          <h3>Presets</h3>
+          {selectedCategory.presets?.map(preset => (
             <button key={preset.name} onClick={() => handlePresetClick(preset.values)}>
               {preset.name}
             </button>
-          ))} */}
+          ))}
 
           <h3>Fields</h3>
           {selectedCategory.fields?.map((field, i) => (
