@@ -84,7 +84,7 @@ export default function Show({ category, onEdit, onDelete, onSave }) {
           </li>
         ))}
         <li>
-          <button onClick={() => transition(CREATE_PRESET)}>Add preset</button>
+          <button onClick={() => transition(CREATE_PRESET)}>+ Add preset</button>
         </li>
         </>
       </ul>

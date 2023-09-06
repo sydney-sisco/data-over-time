@@ -65,7 +65,7 @@ export default function Category({id, category, saveCategory, deleteCategory}) {
   }, [category, transition, mode]);
 
   return (
-    <div>
+    <div className="card">
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && (
         <Show
