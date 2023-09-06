@@ -37,6 +37,15 @@ export default function Category({id, category, saveCategory, deleteCategory}) {
       .catch(() => transition(ERROR_SAVE, true));
   }
 
+  function savePresets(presets) {
+    const newCategory = {
+      ...category,
+      presets,
+    };
+
+    save(newCategory);
+  }
+
   function confirmDelete() {
     transition(DELETING, true);
 
@@ -63,6 +72,7 @@ export default function Category({id, category, saveCategory, deleteCategory}) {
           category={category}
           onEdit={() => transition(EDIT)}
           onDelete={() => transition(CONFIRM)}
+          onSave={savePresets}
         />
       )}
       {mode === CREATE && (
