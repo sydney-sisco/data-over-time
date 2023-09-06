@@ -42,7 +42,7 @@ export default function Form({ category, onSave, onCancel }) {
       <ul>
         {presets.map((preset) => (
           <li key={preset.name}>
-            <button onClick={() => {}}>
+            <button disabled onClick={() => {}}>
               {preset.name}
             </button>
           </li>
