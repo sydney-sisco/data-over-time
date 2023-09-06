@@ -38,6 +38,8 @@ const LogData = ({ categories, submitData }) => {
     console.log('posting: ', data);
     
     submitData(data);
+
+    setFieldValues({});
   };
 
   return (
@@ -67,9 +69,9 @@ const LogData = ({ categories, submitData }) => {
             </div>
           ))}
 
+        <button onClick={postData}>Record</button>
         </div>
       )}
-      <button onClick={postData}>Record</button>
     </div>
   );
 };
