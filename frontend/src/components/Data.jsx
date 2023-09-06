@@ -15,8 +15,9 @@ export function Data ({ data, deleteThought }) {
         <span>{localDate} - {localTime}</span>
       </div>
       <div>
-        <span>{data.category}</span>
-        {Object.keys(data.values).map((key, i) => (
+        {/* data.name added here for backward compatibility. TODO: Update/delete old data entries that use name instead of category */}
+        <span>{data.category ? data.category : data.name}</span>
+        {data.values && Object.keys(data.values).map((key, i) => (
           <div key={i}>
             <span>{key}</span>:&nbsp;
             <span>{data.values[key]}</span>
