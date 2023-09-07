@@ -1,29 +1,39 @@
 import React, { useState } from 'react';
-import { Link }from 'wouter';
-import { Button, TextField, List, ListItem, Typography, Card, CardContent } from '@mui/material';
-
-const CategoryButton = ({ category, onClick }) => {
-  return (
-    // <button onClick={() => onClick(category)}>
-    //   {category}
-    // </button>
-    <Button variant="outlined" onClick={() => onClick(category)}>
-      {category}
-    </Button>
-  )
-}
+import { Link } from 'wouter';
+import { Box, Grid, Button, TextField, List, ListItem, Typography, Card, CardContent } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 const LogData = ({ categories, submitData }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedPreset, setSelectedPreset] = useState(null);
   const [fieldValues, setFieldValues] = useState({});
 
+  const clearCategorySelection = () => {
+    setSelectedCategory(null);
+    setSelectedPreset(null);
+    setFieldValues({});
+  }
+
   const handleCategoryClick = (categoryIndex) => {
+
+    setSelectedPreset(null);
+    if (selectedCategory === categories[categoryIndex]) {
+      clearCategorySelection();
+      return;
+    }
     setSelectedCategory(categories[categoryIndex]);
     setFieldValues({});
   };
 
-  const handlePresetClick = (presetValues) => {
-    setFieldValues(presetValues);
+  const handlePresetClick = (preset) => {
+    if (selectedPreset === preset) {
+      setSelectedPreset(null);
+      setFieldValues({});
+      return;
+    }
+    setSelectedPreset(preset);
+    setFieldValues(preset.values);
+    // setFieldValues(presetValues);
   };
 
   const handleInputChange = (fieldName, event) => {
@@ -40,50 +50,84 @@ const LogData = ({ categories, submitData }) => {
     };
 
     console.log('posting: ', data);
-    
+
     submitData(data);
 
     setFieldValues({});
+    setSelectedPreset(null);
   };
 
   return (
-    <div>
-      <h2>Select a category:</h2>
-      {categories.map((category, i) => (
-        <CategoryButton key={category.id} category={category.name} onClick={() => {handleCategoryClick(i)}} />
-      ))}
-      <Link href="/categories">
-        {/* <button>+ Manage Categories</button> */}
-        <Button variant="contained">+ Manage Categories</Button>
-      </Link>
-
-      {selectedCategory && (
-        <div>
-          <h2>Selected Category: {selectedCategory.name}</h2>
-          
-          <h3>Presets</h3>
-          {selectedCategory.presets?.map(preset => (
-            // <button key={preset.name} onClick={() => handlePresetClick(preset.values)}>
-            //   {preset.name}
-            // </button>
-            <Button variant="outlined" onClick={() => handlePresetClick(preset.values)}>
-              {preset.name}
-            </Button>
+    <Card
+      align="left"
+      sx={{
+        maxWidth: 600,
+        mx: 'auto',
+        my: 4,
+        p: 2,
+      }}
+    >
+      <CardContent>
+        <Typography component="h2" variant="h4" sx={{ py: 2 }}>Select a category</Typography>
+        <Grid container spacing={2}>
+          {categories.map((category, i) => (
+            <Grid item xs='auto' key={category.id}>
+              <Button variant={selectedCategory === category ? "outlined" : "contained"} onClick={() => handleCategoryClick(i)}>
+                {category.name}
+              </Button>
+            </Grid>
           ))}
+          <Grid item xs='auto'>
+            <Link href="/categories">
+              <Button variant="contained" color="secondary" startIcon={<AddIcon />}>New</Button>
+            </Link>
+          </Grid>
+        </Grid>
 
-          <h3>Fields</h3>
-          {selectedCategory.fields?.map((field, i) => (
-            <div key={i}>
-              <label>{field}</label>
-              <input type="text" value={fieldValues[field] || ''} onChange={(e) => handleInputChange(field, e)} />
-            </div>
-          ))}
+        {selectedCategory && (
 
-        {/* <button onClick={postData}>Record</button> */}
-        <Button variant="contained" onClick={postData}>Record</Button>
-        </div>
-      )}
-    </div>
+          <div>
+            { selectedCategory.presets?.length > 0 && (
+              <>
+              <Typography component="h2" variant="h5" sx={{ py: 2 }}>{selectedCategory.name} Presets</Typography>
+              
+              <Grid container spacing={2}>
+                {selectedCategory.presets?.map((preset, i) => (
+                  <Grid item xs='auto' key={`${preset.name}`+i}>
+                    <Button variant={selectedPreset === preset ? "outlined" : "contained"} onClick={() => handlePresetClick(preset)}>
+                      {preset.name}
+                    </Button>
+                  </Grid>
+                ))}
+              </Grid>
+
+              <Typography component="h2" variant="h5" sx={{ py: 2 }}>Fields</Typography>
+              <List>
+              
+              {selectedCategory.fields?.map((field, i) => (
+                <ListItem key={field}>
+                  <TextField
+                    label={field}
+                    value={fieldValues[field] || ''}
+                    onChange={(e) => handleInputChange(field, e)}
+                  />
+                </ListItem>
+              ))}
+              </List>
+              </>
+            )}
+            <Box align="center" sx={
+              {
+                mt: 4,
+              }
+            }>
+              <Button size="large" variant="contained" onClick={postData}>Record</Button>
+            </Box>
+              
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
