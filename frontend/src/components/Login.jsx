@@ -1,6 +1,16 @@
 import { useState, useContext } from 'react';
 import axios from "axios";
 import { AuthContext } from '../AuthProvider';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Avatar from '@mui/material/Avatar';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import Grid from '@mui/material/Unstable_Grid2';
+import { Link } from "wouter";
+
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -23,19 +33,64 @@ function Login() {
   };
 
   return (
-    <div className="card">
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username:
-          <input type="text" onChange={e => setUsername(e.target.value)} />
-        </label>
-        <label>
-          Password:
-          <input type="password" onChange={e => setPassword(e.target.value)} />
-        </label>
-        <button type="submit">Login</button>
-      </form>
-    </div>
+    <Box component="form" className="form" onSubmit={handleSubmit} sx={{mt: 8}}>
+      <Grid
+        container
+        spacing={2}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Grid
+          xs={12}
+          sm={8}
+          md={5}
+          component={Box}
+        >
+          <Paper elevation={3} sx={{p: 3}}>
+            <Avatar>
+              <LockOpenIcon />
+            </Avatar>
+
+            <Typography component="h1" variant="h5">Login</Typography>
+
+            <TextField
+              label="Username"
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              required
+              onChange={e => setUsername(e.target.value)}
+            />
+
+            <TextField
+              label="Password"
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              required
+              onChange={e => setPassword(e.target.value)}
+            />
+
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              sx={{mt: 3,mb: 2}}
+            >
+              Login
+            </Button>
+
+            <Grid container>
+              <Grid item>
+                <Link href="/register" variant="body2">
+                  {"Don't have an account? Sign Up!"}
+                </Link>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
 
