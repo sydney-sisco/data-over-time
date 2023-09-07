@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { Link }from 'wouter';
+import { Button, TextField, List, ListItem, Typography, Card, CardContent } from '@mui/material';
 
 const CategoryButton = ({ category, onClick }) => {
   return (
-    <button onClick={() => onClick(category)}>
+    // <button onClick={() => onClick(category)}>
+    //   {category}
+    // </button>
+    <Button variant="outlined" onClick={() => onClick(category)}>
       {category}
-    </button>
+    </Button>
   )
 }
 
@@ -48,7 +52,10 @@ const LogData = ({ categories, submitData }) => {
       {categories.map((category, i) => (
         <CategoryButton key={category.id} category={category.name} onClick={() => {handleCategoryClick(i)}} />
       ))}
-      <Link href="/categories"><button>+ Manage Categories</button></Link>
+      <Link href="/categories">
+        {/* <button>+ Manage Categories</button> */}
+        <Button variant="contained">+ Manage Categories</Button>
+      </Link>
 
       {selectedCategory && (
         <div>
@@ -56,9 +63,12 @@ const LogData = ({ categories, submitData }) => {
           
           <h3>Presets</h3>
           {selectedCategory.presets?.map(preset => (
-            <button key={preset.name} onClick={() => handlePresetClick(preset.values)}>
+            // <button key={preset.name} onClick={() => handlePresetClick(preset.values)}>
+            //   {preset.name}
+            // </button>
+            <Button variant="outlined" onClick={() => handlePresetClick(preset.values)}>
               {preset.name}
-            </button>
+            </Button>
           ))}
 
           <h3>Fields</h3>
@@ -69,7 +79,8 @@ const LogData = ({ categories, submitData }) => {
             </div>
           ))}
 
-        <button onClick={postData}>Record</button>
+        {/* <button onClick={postData}>Record</button> */}
+        <Button variant="contained" onClick={postData}>Record</Button>
         </div>
       )}
     </div>
