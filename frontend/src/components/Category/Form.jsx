@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Button, TextField, List, ListItem, Typography, Card, CardContent } from '@mui/material';
 
 export default function Form({ category, onSave, onCancel }) {
   const [name, setName] = useState(category?.name || "");
@@ -36,33 +37,70 @@ export default function Form({ category, onSave, onCancel }) {
   }
 
   return (
+    <Card>
+      <CardContent>
     <form onSubmit={(event) => event.preventDefault()}>
-      <input onChange={(event) => setName(event.target.value)} value={name} />
-      <h2>Presets</h2>
-      <ul>
+
+      <TextField
+        onChange={(event) => setName(event.target.value)}
+        value={name}
+        label="Category Name"
+      />
+
+      {!!presets.length && (
+      <Typography variant="h6" gutterBottom component="div">
+        Presets
+      </Typography>
+      )}
+
+      <List>
         {presets.map((preset) => (
-          <li key={preset.name}>
-            <button disabled onClick={() => {}}>
+          <ListItem key={preset.name}>
+            <Button variant="outlined" disabled>
               {preset.name}
-            </button>
-          </li>
+            </Button>
+          </ListItem>
         ))}
-      </ul>
-      <h2>Fields</h2>
-      <ul>
+      </List>
+
+      <Typography variant="h6" gutterBottom component="div">
+        Fields
+      </Typography>
+
+      <List>
         {fields.map((field, i) => (
-          <li key={i}>
-            <input onChange={(event) => handleFieldChange(i, event)} value={field} />
-            <button onClick={() => handleFieldRemove(i)}>Delete</button>
-          </li>
+          <ListItem key={i}>
+            <TextField
+              onChange={(event) => handleFieldChange(i, event)}
+              value={field} />
+
+            <Button variant="contained" color="error" onClick={() => handleFieldRemove(i)}>
+              Delete
+            </Button>
+          </ListItem>
         ))}
-        <li>
-          <button onClick={() => setFields([...fields, ""])}>Add Field</button>
-        </li>
-      </ul>
-      <button onClick={validate}>Save</button>
-      <p>{error}</p>
-      <button onClick={onCancel}>Cancel</button>
+
+        <ListItem>
+          <Button variant="outlined" onClick={() => setFields([...fields, ""])}>
+            Add Field
+          </Button>
+        </ListItem>
+      </List>
+
+      <Button variant="contained" onClick={validate}>
+        Save
+      </Button>
+
+      <Typography variant="body1" gutterBottom>
+        {error}
+      </Typography>
+
+      <Button variant="outlined" onClick={onCancel}>
+        Cancel
+      </Button>
+
     </form>
+    </CardContent>
+    </Card>
   );
 }
