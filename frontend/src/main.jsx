@@ -7,7 +7,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 import App from './App.jsx'
-import './index.css'
+// import './index.css'
 import { AuthProvider } from './AuthProvider';
 
 
