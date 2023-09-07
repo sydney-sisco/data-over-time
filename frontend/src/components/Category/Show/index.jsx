@@ -115,6 +115,13 @@ export default function Show({ category, onEdit, onDelete, onSave }) {
                 />
               </ListItem>
             ))}
+
+            {/* placeholder so the card height stays the same when you enter edit mode */}
+            <ListItem
+              sx={{
+                mt: 4.5,
+              }}
+            />
           </List>
         )}
         {mode === PRESET_SELECTED && (
@@ -178,8 +185,8 @@ export default function Show({ category, onEdit, onDelete, onSave }) {
               </ListItem>
             ))}
             <ListItem>
-              <Button variant="outlined" onClick={() => back()}>Cancel</Button>
-              <Button variant="contained" onClick={() => saveNewPreset()}>Save preset</Button>
+              <Button variant="outlined" onClick={() => back()} sx={{mr:2}}>Cancel</Button>
+              <Button variant="contained" onClick={() => saveNewPreset()} startIcon={<SaveIcon />}>Save preset</Button>
             </ListItem>
           </List>
         )}

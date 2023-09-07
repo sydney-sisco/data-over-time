@@ -67,7 +67,7 @@ export default function Form({ category, onSave, onCancel }) {
             {!!presets.length && (
               <Grid item xs='auto'>
                 <Button onClick={() => { clearPresetSelection(); transition(CREATE_PRESET) }} variant="contained" disabled startIcon={<AddIcon />}>
-                  Add preset
+                  New
                 </Button>
               </Grid>
             )}
@@ -84,10 +84,10 @@ export default function Form({ category, onSave, onCancel }) {
                   defaultValue={field}
                 />
 
-                <Button variant="outlined" onClick={() => handleFieldRemove(i)} startIcon={<DeleteIcon />}
+                <Button variant="outlined" onClick={() => handleFieldRemove(i)}
                   sx={{ ml: 2 }}
                 >
-                  Delete
+                  <DeleteIcon />
                 </Button>
               </ListItem>
             ))}
