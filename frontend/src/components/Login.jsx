@@ -1,15 +1,16 @@
 import { useState, useContext } from 'react';
-import axios from "axios";
 import { AuthContext } from '../AuthProvider';
-import Button from '@mui/material/Button';
+import { Link } from "wouter";
+import axios from "axios";
+
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Unstable_Grid2';
 import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
-import Grid from '@mui/material/Unstable_Grid2';
-import { Link } from "wouter";
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 
 function Login() {
@@ -25,6 +26,7 @@ function Login() {
       password,
     };
 
+    // TODO: move this to AuthProvider
     const res = await axios.post('/api/login', data);
     if (res.status === 200) {
       console.log('Login successful');
