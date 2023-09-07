@@ -19,8 +19,9 @@ const DataList = ({ entries }) => {
             sm={8}
             md={7}
             component={Box}
+            key={entry.id}
           >
-            <Data key={entry.id} data={entry} />
+            <Data data={entry} />
           </Grid>
         ))}
       </Grid>
