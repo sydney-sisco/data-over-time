@@ -61,6 +61,7 @@ function Login() {
               margin="normal"
               fullWidth
               required
+              autoComplete='username'
               onChange={e => setUsername(e.target.value)}
             />
 
@@ -70,6 +71,8 @@ function Login() {
               margin="normal"
               fullWidth
               required
+              type="password"
+              autoComplete='current-password'
               onChange={e => setPassword(e.target.value)}
             />
 

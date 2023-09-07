@@ -63,6 +63,7 @@ function Register() {
               margin="normal"
               fullWidth
               required
+              autoComplete="username"
               onChange={e => setUsername(e.target.value)}
             />
 
@@ -72,6 +73,8 @@ function Register() {
               margin="normal"
               fullWidth
               required
+              type="password"
+              autoComplete="new-password"
               onChange={e => setPassword(e.target.value)}
             />
 
