@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { Button, TextField, List, ListItem, Typography, Card, CardContent } from '@mui/material';
+import { Divider, Grid, Box, Button, TextField, List, ListItem, Typography, Card, CardContent } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
 
 export default function Form({ category, onSave, onCancel }) {
   const [name, setName] = useState(category?.name || "");
@@ -37,70 +40,82 @@ export default function Form({ category, onSave, onCancel }) {
   }
 
   return (
-    <Card>
+    <Card align="left">
       <CardContent>
-    <form onSubmit={(event) => event.preventDefault()}>
+        <form onSubmit={(event) => event.preventDefault()}>
 
-      <TextField
-        onChange={(event) => setName(event.target.value)}
-        value={name}
-        label="Category Name"
-      />
+          <TextField
+            onChange={(event) => setName(event.target.value)}
+            value={name}
+            label="Category Name"
+            sx={{ mb: 2 }
+            }
+          />
+          <Divider variant="middle"/>
+          {!!presets.length && (
+            <Typography component="h2" variant="h4" sx={{ py: 2 }}>Presets</Typography>
+          )}
 
-      {!!presets.length && (
-      <Typography variant="h6" gutterBottom component="div">
-        Presets
-      </Typography>
-      )}
+          <Grid container spacing={2}>
+            {presets.map((preset) => (
+              <Grid item xs='auto' key={preset.name}>
+                <Button value={preset.name} disabled variant="contained">
+                  {preset.name}
+                </Button>
+              </Grid>
+            ))}
+            {!!presets.length && (
+              <Grid item xs='auto'>
+                <Button onClick={() => { clearPresetSelection(); transition(CREATE_PRESET) }} variant="contained" disabled startIcon={<AddIcon />}>
+                  Add preset
+                </Button>
+              </Grid>
+            )}
+          </Grid>
 
-      <List>
-        {presets.map((preset) => (
-          <ListItem key={preset.name}>
-            <Button variant="outlined" disabled>
-              {preset.name}
-            </Button>
-          </ListItem>
-        ))}
-      </List>
+          <Typography component="h2" variant="h4" sx={{ py: 2 }}>Fields</Typography>
 
-      <Typography variant="h6" gutterBottom component="div">
-        Fields
-      </Typography>
+          <List>
+            {fields.map((field, i) => (
+              <ListItem key={i}>
+                <TextField
+                  onChange={(event) => handleFieldChange(i, event)}
+                  label="Field Name"
+                  defaultValue={field}
+                />
 
-      <List>
-        {fields.map((field, i) => (
-          <ListItem key={i}>
-            <TextField
-              onChange={(event) => handleFieldChange(i, event)}
-              value={field} />
+                <Button variant="outlined" onClick={() => handleFieldRemove(i)} startIcon={<DeleteIcon />}
+                  sx={{ ml: 2 }}
+                >
+                  Delete
+                </Button>
+              </ListItem>
+            ))}
 
-            <Button variant="contained" color="error" onClick={() => handleFieldRemove(i)}>
-              Delete
-            </Button>
-          </ListItem>
-        ))}
+            <ListItem>
+              <Button variant="outlined" onClick={() => setFields([...fields, ""])} startIcon={<AddIcon />}>
+                Add Field
+              </Button>
+            </ListItem>
+          </List>
 
-        <ListItem>
-          <Button variant="outlined" onClick={() => setFields([...fields, ""])}>
-            Add Field
-          </Button>
-        </ListItem>
-      </List>
+          <Typography variant="body1" gutterBottom>
+            {error}
+          </Typography>
 
-      <Button variant="contained" onClick={validate}>
-        Save
-      </Button>
-
-      <Typography variant="body1" gutterBottom>
-        {error}
-      </Typography>
-
-      <Button variant="outlined" onClick={onCancel}>
-        Cancel
-      </Button>
-
-    </form>
-    </CardContent>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'flex-end',
+              mt: 2,
+            }}
+          >
+            <Button variant="outlined" onClick={onCancel} sx={{ mr: 2 }} >Cancel</Button>
+            <Button variant="contained" onClick={validate} startIcon={<SaveIcon />}>Save</Button>
+          </Box>
+        </form>
+      </CardContent>
     </Card>
   );
 }

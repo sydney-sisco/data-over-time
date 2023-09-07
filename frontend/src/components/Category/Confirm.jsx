@@ -5,8 +5,8 @@ export default function Confirm({ message, onConfirm, onCancel }) {
     <Card>
       <CardContent>
       <Typography>{message}</Typography>
-      <Button variant="contained" color="primary" onClick={onConfirm}>Confirm</Button>
-      <Button variant="outlined" color="primary" onClick={onCancel}>Cancel</Button>
+      <Button variant="contained" color="primary" onClick={onCancel} sx={{mr:2}}>Cancel</Button>
+      <Button variant="outlined" color="error" onClick={onConfirm}>Confirm</Button>
       </CardContent>
     </Card>
   );
