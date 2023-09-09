@@ -22,7 +22,6 @@ import {
   getCategoriesForList,
 } from './helpers/selectors';
 import useApplicationData from "./hooks/useApplicationData.js";
-import Copyright from './components/Copyright';
 
 function App() {
   const { isLoggedIn, token } = useContext(AuthContext);
@@ -115,11 +114,11 @@ function App() {
           <>
             <div className="nav">
               <Link href="/login">
-                <Button variant="contained">Login</Button>
+                <Button sx={{mx: 2}} variant="contained">Login</Button>
               </Link>
 
-              <Link href="/register">
-                <Button variant="contained">Register</Button>
+              <Link href="/register" >
+                <Button sx={{mx: 2}} variant="contained">Register</Button>
               </Link>
             </div>
             <p>You must be logged in to continue.</p>
@@ -134,7 +133,6 @@ function App() {
         ? <p>You are logged in! 🎉 token: <b>{token.substring(0, 20)}</b></p>
         : <p>You are not logged in.</p>
       } */}
-      {/* <Copyright /> */}
     </Container>
     </ThemeProvider>
   )
