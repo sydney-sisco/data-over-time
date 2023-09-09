@@ -30,7 +30,7 @@ function Login() {
     const res = await axios.post('/api/login', data);
     if (res.status === 200) {
       console.log('Login successful');
-      login(res.data.token);
+      login(res.data);
     }
   };
 
