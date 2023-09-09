@@ -73,6 +73,10 @@ function App() {
     <Container
       // maxWidth="sm"
       align="center"
+      sx={{
+        mt: 8,
+        mb: 24,
+      }}
     >
       <div>
       </div>
