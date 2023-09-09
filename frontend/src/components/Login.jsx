@@ -86,7 +86,7 @@ function Login() {
             </Button>
 
             <Grid container>
-              <Grid item>
+              <Grid>
                 <Link href="/register" variant="body2">
                   {"Don't have an account? Sign Up!"}
                 </Link>
