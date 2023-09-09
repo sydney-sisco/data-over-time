@@ -98,6 +98,9 @@ function App() {
           deleteCategory={deleteCategory}
         />
       </Route>
+      <Route path="/archive">
+        <DataList entries={state.entries} />
+      </Route>
       <Route path="/you">
         <UserPage 
           user={user}
@@ -109,7 +112,6 @@ function App() {
         {isLoggedIn ?
           <>
             <LogData categories={getCategoriesForList(state)} setData={setData} submitData={submitData} />
-            <DataList entries={state.entries} />
           </>
           :
           <>
