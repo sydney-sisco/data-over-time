@@ -7,7 +7,6 @@ import { ApiTest } from './components/ApiTest'
 import futureLogo from '/future.svg'
 import Login from './components/Login';
 import { Route, Link, useLocation } from "wouter";
-import Logout from './components/Logout';
 import Register from './components/Register';
 import DataList from './components/DataList';
 import LogData from './components/LogData';
@@ -90,7 +89,6 @@ function App() {
       <Route path="/login"><Login /></Route>
       <Route path="/register"><Register /></Route>
       <Route path="/categories">
-        <Logout />
         {categories}
         <Category
           key="placeholder"
@@ -110,7 +108,6 @@ function App() {
         
         {isLoggedIn ?
           <>
-            <Logout />
             <LogData categories={getCategoriesForList(state)} setData={setData} submitData={submitData} />
             <DataList entries={state.entries} />
           </>
