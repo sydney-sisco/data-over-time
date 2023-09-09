@@ -36,15 +36,6 @@ function App() {
 
   const [value, setValue] = useState(0);
 
-  // useEffect(() => {
-  //   // when isLoggedIn changes, redirect to root if user is not logged in
-  //   console.log('isLoggedIn changed', isLoggedIn);
-  //   if (!isLoggedIn) {
-  //     console.log('redirecting to /');
-  //     setLocation('/');
-  //   }
-  // }, [isLoggedIn]);
-
   const theme = useMemo(
     () =>
       createTheme({
