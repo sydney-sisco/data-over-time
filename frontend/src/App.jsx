@@ -15,8 +15,13 @@ import Category from './components/Category';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
+import { Paper, BottomNavigation, BottomNavigationAction } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import CircleIcon from '@mui/icons-material/Circle';
+import CategoryIcon from '@mui/icons-material/Category';
+import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
+import TimelineIcon from '@mui/icons-material/Timeline';
+import EngineeringIcon from '@mui/icons-material/Engineering';
 
 import {
   getCategoriesForList,
@@ -29,12 +34,16 @@ function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [location, setLocation] = useLocation();
 
-  useEffect(() => {
-    // when isLoggedIn changes, redirect to root if user is not logged in
-    if (!isLoggedIn) {
-      setLocation('/');
-    }
-  }, [isLoggedIn]);
+  const [value, setValue] = useState(0);
+
+  // useEffect(() => {
+  //   // when isLoggedIn changes, redirect to root if user is not logged in
+  //   console.log('isLoggedIn changed', isLoggedIn);
+  //   if (!isLoggedIn) {
+  //     console.log('redirecting to /');
+  //     setLocation('/');
+  //   }
+  // }, [isLoggedIn]);
 
   const theme = useMemo(
     () =>
@@ -133,6 +142,21 @@ function App() {
         ? <p>You are logged in! 🎉 token: <b>{token.substring(0, 20)}</b></p>
         : <p>You are not logged in.</p>
       } */}
+      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setLocation(newValue);
+          }}
+        >
+          <BottomNavigationAction value="/categories" label="Categories" icon={<CategoryIcon />} />
+          <BottomNavigationAction value="/" label="Submit" icon={<HistoryEduIcon />} />
+          <BottomNavigationAction value="/" label="" icon={<CircleIcon fontSize='large'/>}/>
+          <BottomNavigationAction value="/archive" label="Data" icon={<TimelineIcon />} />
+          <BottomNavigationAction value="/you" label="You" icon={<EngineeringIcon />} />
+        </BottomNavigation>
+      </Paper>
     </Container>
     </ThemeProvider>
   )
