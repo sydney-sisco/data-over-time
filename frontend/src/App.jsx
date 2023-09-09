@@ -90,9 +90,6 @@ function App() {
       <Route path="/register"><Register /></Route>
       <Route path="/categories">
         <Logout />
-        <Link href="/">
-          <Button variant="contained">Back</Button>
-        </Link>
         {categories}
         <Category
           key="placeholder"
