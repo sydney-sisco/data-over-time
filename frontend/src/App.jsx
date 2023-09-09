@@ -27,9 +27,10 @@ import {
   getCategoriesForList,
 } from './helpers/selectors';
 import useApplicationData from "./hooks/useApplicationData.js";
+import UserPage from './components/UserPage';
 
 function App() {
-  const { isLoggedIn, token } = useContext(AuthContext);
+  const { isLoggedIn, token, logout, user } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [location, setLocation] = useLocation();
@@ -97,6 +98,12 @@ function App() {
           category={null}
           saveCategory={saveCategory}
           deleteCategory={deleteCategory}
+        />
+      </Route>
+      <Route path="/you">
+        <UserPage 
+          user={user}
+          onLogout={logout}
         />
       </Route>
       <Route path="/">
