@@ -6,7 +6,7 @@ import { AuthContext } from './AuthProvider';
 import { ApiTest } from './components/ApiTest'
 import futureLogo from '/future.svg'
 import Login from './components/Login';
-import { Route, Link, useLocation } from "wouter";
+import { Route, Switch, Link, useLocation } from "wouter";
 import Register from './components/Register';
 import DataList from './components/DataList';
 import LogData from './components/LogData';
@@ -27,6 +27,7 @@ import {
 } from './helpers/selectors';
 import useApplicationData from "./hooks/useApplicationData.js";
 import UserPage from './components/UserPage';
+import Gate from './components/Gate';
 
 function App() {
   const { isLoggedIn, token, logout, user } = useContext(AuthContext);
@@ -70,92 +71,86 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-    <Container
-      // maxWidth="sm"
-      align="center"
-      sx={{
-        mt: 8,
-        mb: 24,
-      }}
-    >
-      <div>
-      </div>
-      <Box >
-        <Link href="/">
-          {/* <img src={futureLogo} className="logo" alt="future logo" /> */}
-          <CircleIcon sx={{ fontSize: 140 }} />
-        </Link>
-        <Typography sx={{ my: 4 }} component="h1" variant="h2" gutterBottom>
-          Data over Time
-        </Typography>
-      </Box>
+      <Container
+        // maxWidth="sm"
+        align="center"
+        sx={{
+          mt: 8,
+          mb: 24,
+        }}
+      >
+        <div>
+        </div>
+        <Box >
+          <Link href="/">
+            {/* <img src={futureLogo} className="logo" alt="future logo" /> */}
+            <CircleIcon sx={{ fontSize: 140 }} />
+          </Link>
+          <Typography sx={{ my: 4 }} component="h1" variant="h2" gutterBottom>
+            Data over Time
+          </Typography>
+        </Box>
 
-      <Route path="/login"><Login /></Route>
-      <Route path="/register"><Register /></Route>
-      <Route path="/categories">
-        {categories}
-        <Category
-          key="placeholder"
-          id={null}
-          category={null}
-          saveCategory={saveCategory}
-          deleteCategory={deleteCategory}
-        />
-      </Route>
-      <Route path="/archive">
-        <DataList entries={state.entries} />
-      </Route>
-      <Route path="/you">
-        <UserPage 
-          user={user}
-          onLogout={logout}
-        />
-      </Route>
-      <Route path="/">
-        
-        {isLoggedIn ?
-          <>
-            <LogData categories={getCategoriesForList(state)} setData={setData} submitData={submitData} />
-          </>
-          :
-          <>
-            <div className="nav">
-              <Link href="/login">
-                <Button sx={{mx: 2}} variant="contained">Login</Button>
-              </Link>
+        <Switch>
+          <Route path="/login"><Login /></Route>
+          <Route path="/register"><Register /></Route>
 
-              <Link href="/register" >
-                <Button sx={{mx: 2}} variant="contained">Register</Button>
-              </Link>
-            </div>
-            <p>You must be logged in to continue.</p>
-          </>
-        }
-      </Route>
 
-      {/* <ApiTest endpoint="/api/test" /> */}
-      {/* <ApiTest endpoint="/api/test_not_found" /> */}
-      {/* <ApiTest endpoint="/api/test_protected" /> */}
-      {/* { isLoggedIn
+          {!isLoggedIn ?
+            <Route>
+              <Gate />
+            </Route>
+            :
+            <>
+              <Route path="/categories">
+                {categories}
+                <Category
+                  key="placeholder"
+                  id={null}
+                  category={null}
+                  saveCategory={saveCategory}
+                  deleteCategory={deleteCategory}
+                />
+              </Route>
+              <Route path="/archive">
+                <DataList entries={state.entries} />
+              </Route>
+              <Route path="/you">
+                <UserPage
+                  user={user}
+                  onLogout={logout}
+                />
+              </Route>
+              <Route path="/">
+                <LogData categories={getCategoriesForList(state)} setData={setData} submitData={submitData} />
+              </Route>
+            </>
+          }
+        </Switch>
+
+        {/* <ApiTest endpoint="/api/test" /> */}
+        {/* <ApiTest endpoint="/api/test_not_found" /> */}
+        {/* <ApiTest endpoint="/api/test_protected" /> */}
+        {/* { isLoggedIn
         ? <p>You are logged in! 🎉 token: <b>{token.substring(0, 20)}</b></p>
         : <p>You are not logged in.</p>
       } */}
-      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-        <BottomNavigation
-          showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            setLocation(newValue);
-          }}
-        >
-          <BottomNavigationAction value="/categories" label="Categories" icon={<CategoryIcon />} />
-          <BottomNavigationAction value="/" label="Submit" icon={<HistoryEduIcon />} />
-          <BottomNavigationAction value="/" label="" icon={<CircleIcon fontSize='large'/>}/>
-          <BottomNavigationAction value="/archive" label="Data" icon={<TimelineIcon />} />
-          <BottomNavigationAction value="/you" label="You" icon={<EngineeringIcon />} />
-        </BottomNavigation>
-      </Paper>
-    </Container>
+        <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+          <BottomNavigation
+            showLabels
+            value={value}
+            onChange={(event, newValue) => {
+              setLocation(newValue);
+            }}
+          >
+            <BottomNavigationAction value="/categories" label="Categories" icon={<CategoryIcon />} />
+            <BottomNavigationAction value="/" label="Submit" icon={<HistoryEduIcon />} />
+            <BottomNavigationAction value="/" label="" icon={<CircleIcon fontSize='large' />} />
+            <BottomNavigationAction value="/archive" label="Data" icon={<TimelineIcon />} />
+            <BottomNavigationAction value="/you" label="You" icon={<EngineeringIcon />} />
+          </BottomNavigation>
+        </Paper>
+      </Container>
     </ThemeProvider>
   )
 }
