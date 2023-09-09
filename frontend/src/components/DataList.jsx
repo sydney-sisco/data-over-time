@@ -1,20 +1,31 @@
 import React from 'react';
 import { Data } from './Data';
-import styles from './DataList.module.css';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Unstable_Grid2';
 
 const DataList = ({ entries }) => {
 
   return (
-    <div className={styles.list}>
-      {/* <h3>{`Today:`}</h3> */}
-      <ul>
+    <Box sx={{mt: 8}}>
+      <Grid
+        container
+        spacing={2}
+        alignItems="center"
+        justifyContent="center"
+      >
         {entries.map((entry, index) => (
-          <Data key={entry.id} data={entry} />
+          <Grid
+            xs={12}
+            sm={8}
+            md={7}
+            component={Box}
+            key={entry.id}
+          >
+            <Data data={entry} />
+          </Grid>
         ))}
-      </ul>
-      {/* <h3>{`Yesterday:`}</h3> */}
-      {/* <h3>{`Older:`}</h3> */}
-    </div>
+      </Grid>
+    </Box>
   );
 };
 

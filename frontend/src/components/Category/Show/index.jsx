@@ -6,6 +6,13 @@ const PRESET_SELECTED = "PRESET_SELECTED";
 const EDIT_PRESET = "EDIT_PRESET";
 const CREATE_PRESET = "CREATE_PRESET";
 
+import { Typography, Card, CardContent, Button, List, ListItem, TextField, Grid, Box } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
+import Divider from '@mui/material/Divider';
+import SaveIcon from '@mui/icons-material/Save';
+
 export default function Show({ category, onEdit, onDelete, onSave }) {
   const { mode, transition, back } = useVisualMode(SHOW);
 
@@ -13,11 +20,15 @@ export default function Show({ category, onEdit, onDelete, onSave }) {
   const [fieldValues, setFieldValues] = useState({});
   const [newPresetName, setNewPresetName] = useState('');
 
+  const clearPresetSelection = () => {
+    setSelectedPreset(null);
+    setFieldValues({});
+  }
+
   const handlePresetClick = (preset) => {
     // unselect preset if already selected
     if (selectedPreset === preset.name) {
-      setFieldValues({});
-      setSelectedPreset(null);
+      clearPresetSelection();
       transition(SHOW);
       return;
     }
@@ -70,83 +81,127 @@ export default function Show({ category, onEdit, onDelete, onSave }) {
   };
 
   return (
-    <div>
-      <h1>{category.name}</h1>
-      <h2>Presets</h2>
-      <ul>
-        <>
-        
-        {category.presets?.map((preset) => (
-          <li key={preset.name}>
-            <button onClick={() => handlePresetClick(preset)}>
-              {preset.name} {selectedPreset === preset.name && '(selected)'}
-            </button>
-          </li>
-        ))}
-        <li>
-          <button onClick={() => transition(CREATE_PRESET)}>+ Add preset</button>
-        </li>
-        </>
-      </ul>
-      <h2>Fields</h2>
-      {mode === SHOW && (
-        <ul>
-          {category.fields?.map((field) => (
-            <li key={field}>
-              <p>{field}</p>
-            </li>
+    <Card align="left">
+      <CardContent>
+        <Typography align="center" component="h1" variant="h2">{category.name}</Typography>
+        <Divider variant="middle"/>
+        <Typography component="h2" variant="h4" sx={{py:2}}>Presets</Typography>
+        <Grid container spacing={2}>
+          {category.presets?.map((preset) => (
+            <Grid item xs='auto' key={preset.name}>
+              <Button value={preset.name} onClick={() => handlePresetClick(preset)} variant={selectedPreset === preset.name ? "outlined" : "contained"} >
+                {preset.name}
+              </Button>
+            </Grid>
           ))}
-        </ul>
-      )}
-      {mode === PRESET_SELECTED && (
-        <>
-          {category.fields?.map((field, i) => (
-            <div key={i}>
-              <label>{field}</label>
-              <input disabled type="text" value={fieldValues[field] || ''} onChange={(e) => handleInputChange(field, e)} />
-            </div>
-          ))}
-          <div>
-            <button onClick={() => transition(EDIT_PRESET)}>Edit preset</button>
-            <button onClick={() => deletePreset()}>Delete preset</button>
-          </div>
-        </>
-      )}
-      {mode === EDIT_PRESET && (
-        <>
-          {category.fields?.map((field, i) => (
-            <div key={i}>
-              <label>{field}</label>
-              <input type="text" value={fieldValues[field] || ''} onChange={(e) => handleInputChange(field, e)} />
-            </div>
-          ))}
-          <div>
-            <button onClick={() => back()}>Cancel</button>
-            <button onClick={() => savePreset()}>Save preset</button>
-            <button onClick={() => deletePreset()}>Delete preset</button>
-          </div>
-        </>
-      )}
-      {mode === CREATE_PRESET && (
-        <>
-          <div>
-            <label>Name</label>
-            <input type="text" value={newPresetName} onChange={(e) => setNewPresetName(e.target.value)} />
-          </div>
-          {category.fields?.map((field, i) => (
-            <div key={i}>
-              <label>{field}</label>
-              <input type="text" value={fieldValues[field] || ''} onChange={(e) => handleInputChange(field, e)} />
-            </div>
-          ))}
-          <div>
-            <button onClick={() => back()}>Cancel</button>
-            <button onClick={() => saveNewPreset()}>Save preset</button>
-          </div>
-        </>
-      )}
-      <button onClick={onEdit}>Edit</button>
-      <button onClick={onDelete}>Delete</button>
-    </div>
+          <Grid item xs='auto'>
+            <Button onClick={() => { clearPresetSelection(); transition(CREATE_PRESET) }} variant="contained" color="secondary" startIcon={<AddIcon/>}>
+              New
+            </Button>
+          </Grid>
+        </Grid>
+        <Typography component="h2" variant="h4" sx={{py:2}}>Fields</Typography>
+        {mode === SHOW && (
+          <List>
+            {category.fields?.map((field) => (
+              <ListItem key={field}>
+                <TextField
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  id="outlined-disabled"
+                  label="Field Name"
+                  defaultValue={field}
+                />
+              </ListItem>
+            ))}
+
+            {/* placeholder so the card height stays the same when you enter edit mode */}
+            <ListItem
+              sx={{
+                mt: 4.5,
+              }}
+            />
+          </List>
+        )}
+        {mode === PRESET_SELECTED && (
+          <List>
+            {category.fields?.map((field, i) => (
+              <ListItem key={field}>
+                <TextField
+                  key={i}
+                  label={field}
+                  value={fieldValues[field] || ' '}
+                  disabled
+                  onChange={(e) => handleInputChange(field, e)}
+                />
+              </ListItem>
+            ))}
+            <ListItem>
+              <Button variant="outlined" onClick={() => transition(EDIT_PRESET)} sx={{mr:2}} startIcon={<EditIcon />}>Edit preset</Button>
+              <Button variant="outlined" onClick={() => deletePreset()} startIcon={<DeleteIcon />}>Delete</Button>
+            </ListItem>
+          </List>
+        )}
+
+        {mode === EDIT_PRESET && (
+          <List>
+            {category.fields?.map((field, i) => (
+              <ListItem key={field}>
+                <TextField
+                  key={i}
+                  label={field}
+                  value={fieldValues[field] || ''}
+                  onChange={(e) => handleInputChange(field, e)}
+                />
+              </ListItem>
+            ))}
+            <ListItem>
+              {/* <Button variant="contained" color="error" onClick={() => back()}>Cancel</Button> */}
+              <Button variant="outlined" onClick={() => back()} sx={{mr:2}}>Cancel</Button>
+              <Button variant="contained" onClick={() => savePreset()} startIcon={<SaveIcon />}>Save preset</Button>
+            </ListItem>
+          </List>
+        )}
+
+        {mode === CREATE_PRESET && (
+          <List>
+            <ListItem>
+            <TextField
+              label="Preset Name"
+              value={newPresetName}
+              onChange={(e) => setNewPresetName(e.target.value)}
+            />
+            </ListItem>
+            <Divider>Fields</Divider>
+            {category.fields?.map((field, i) => (
+              <ListItem key={field}>
+                <TextField
+                  key={i}
+                  label={field}
+                  value={fieldValues[field] || ''}
+                  onChange={(e) => handleInputChange(field, e)}
+                />
+              </ListItem>
+            ))}
+            <ListItem>
+              <Button variant="outlined" onClick={() => back()} sx={{mr:2}}>Cancel</Button>
+              <Button variant="contained" onClick={() => saveNewPreset()} startIcon={<SaveIcon />}>Save preset</Button>
+            </ListItem>
+          </List>
+        )}
+        <Box 
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'flex-end',
+            mt: 2,
+          }}
+        >
+          <Button variant="outlined" onClick={onEdit} sx={{mr:2}} startIcon={<EditIcon />}>Edit</Button>
+          <Button variant="outlined" onClick={onDelete} startIcon={<DeleteIcon />}>Delete</Button>
+        </Box>
+      </CardContent>
+    </Card>
   )
 }

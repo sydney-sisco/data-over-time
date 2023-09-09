@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Unstable_Grid2';
 import useVisualMode from "../../hooks/useVisualMode";
 import Show from "./Show";
 import Form from "./Form";
@@ -17,7 +19,7 @@ const DELETING = "DELETING";
 const ERROR_DELETE = "ERROR_DELETE";
 
 
-export default function Category({id, category, saveCategory, deleteCategory}) {
+export default function Category({ id, category, saveCategory, deleteCategory }) {
   const { mode, transition, back } = useVisualMode(
     category ? SHOW : EMPTY
   );
@@ -65,43 +67,57 @@ export default function Category({id, category, saveCategory, deleteCategory}) {
   }, [category, transition, mode]);
 
   return (
-    <div className="card">
-      {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
-      {mode === SHOW && (
-        <Show
-          category={category}
-          onEdit={() => transition(EDIT)}
-          onDelete={() => transition(CONFIRM)}
-          onSave={savePresets}
-        />
-      )}
-      {mode === CREATE && (
-        <Form
-          category={null}
-          onSave={save}
-          onCancel={back}
-        />
-      )}
-      {mode === EDIT && (
-        <Form
-          category={category}
-          onSave={save}
-          onCancel={back}
-        />
-      )}
-      {mode === CONFIRM && (
-        <Confirm
-          message={"Are you sure you want to delete this category?"}
-          onConfirm={confirmDelete}
-          onCancel={back}
-        />
-      )}
-      {mode === ERROR_DELETE && (
-        <Error
-          message={"Could not delete category"}
-          onClose={back}
-        />
-      )}
-    </div>
+    <Box sx={{ mt: 8 }}>
+      <Grid
+        container
+        spacing={2}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Grid
+          xs={12}
+          sm={8}
+          md={7}
+          component={Box}
+        >
+          {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
+          {mode === SHOW && (
+            <Show
+              category={category}
+              onEdit={() => transition(EDIT)}
+              onDelete={() => transition(CONFIRM)}
+              onSave={savePresets}
+            />
+          )}
+          {mode === CREATE && (
+            <Form
+              category={null}
+              onSave={save}
+              onCancel={back}
+            />
+          )}
+          {mode === EDIT && (
+            <Form
+              category={category}
+              onSave={save}
+              onCancel={back}
+            />
+          )}
+          {mode === CONFIRM && (
+            <Confirm
+              message={"Are you sure you want to delete this category?"}
+              onConfirm={confirmDelete}
+              onCancel={back}
+            />
+          )}
+          {mode === ERROR_DELETE && (
+            <Error
+              message={"Could not delete category"}
+              onClose={back}
+            />
+          )}
+        </Grid>
+      </Grid>
+    </Box>
   )
 }

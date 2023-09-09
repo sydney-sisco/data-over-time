@@ -1,8 +1,10 @@
+import { Box, Button, Typography } from '@mui/material';
+
 export default function Error({ message, onClose }) {
   return (
-    <div>
-      <p>{message}</p>
-      <button onClick={onClose}>Close</button>
-    </div>
+    <Box>
+      <Typography>{message}</Typography>
+      <Button variant="outlined" color="primary" onClick={onClose}>Close</Button>
+    </Box>
   );
 }
