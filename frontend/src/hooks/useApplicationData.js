@@ -11,44 +11,6 @@ import reducer, {
 /*
 Complex state management lives here.
 */
-
-const initialStateTest = {
-  entries: [],
-  categories: {
-    '1' : {
-      name: "Caffeine",
-      fields: ["Caffeine Content (mg)", "Source"],
-      presets: [
-        {
-          name: "Office Coffee",
-          values: {"Caffeine Content (mg)": 100, "Source": "Coffee"}
-        },
-        {
-          name: "Rockstar",
-          values: {"Caffeine Content (mg)": 160, "Source": "Energy Drink"}
-        },
-      ]  
-    },
-    '2' : {
-      name: "Sleep",
-      fields: ["Duration (hrs)", "Quality"],
-      presets: [
-        {
-          name: "Good Sleep",
-          values: {"Duration (hrs)": 8, "Quality": "Good"}
-        },
-        {
-          name: "Bad Sleep",
-          values: {"Duration (hrs)": 8, "Quality": "Bad"}
-        },
-      ]
-    },
-    '3' : {
-      name: "Exercise",
-    },
-  },
-};
-
 const initialState = {
   entries: [],
   categories: {},
@@ -56,12 +18,7 @@ const initialState = {
 
 export default function useApplicationData() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { isLoggedIn, token } = useContext(AuthContext);
-
-  const generateFakeId = async () => {
-    // generate a random 5 digit id in place of firestore for now
-    return Math.floor(Math.random() * 100000);
-  };
+  const { isLoggedIn, token, logout } = useContext(AuthContext);
 
   const deleteCategory = async (id) => {
 
@@ -176,6 +133,13 @@ export default function useApplicationData() {
             'Authorization': 'Bearer ' + token,
           },
         });
+
+        // check for 401 or 403
+        if (res.status === 401 || res.status === 403) {
+          console.log('Unauthorized, logging out');
+          logout();
+          return;
+        }
 
         if (res.status === 200) {
           const responseData = await res.json();

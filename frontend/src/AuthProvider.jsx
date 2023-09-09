@@ -18,6 +18,7 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setToken(null);
+    setLocation("/");
   };
 
   return (
