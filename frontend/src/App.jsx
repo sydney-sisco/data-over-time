@@ -32,6 +32,7 @@ function App() {
   const { isLoggedIn, token, logout, user } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const isStandAlone = useMediaQuery('(display-mode: standalone)');
   const [location, setLocation] = useLocation();
 
   const [value, setValue] = useState(0);
@@ -136,6 +137,10 @@ function App() {
             onChange={(event, newValue) => {
               setLocation(newValue);
             }}
+            sx={isStandAlone?{mb: {
+              xs: 4,
+              sm: 0,
+            }}:{}}
           >
             <BottomNavigationAction value="/categories" label="Categories" icon={<CategoryIcon />} />
             <BottomNavigationAction value="/" label="Submit" icon={<HistoryEduIcon />} />
