@@ -15,7 +15,7 @@ const useUserThemeMode = () => {
 
   // toggle when system preference changes
   React.useEffect(() => {
-    toggleColorMode();
+    setUserMode(prefersDarkMode ? 'dark' : 'light');
   }, [prefersDarkMode]);
 
 
