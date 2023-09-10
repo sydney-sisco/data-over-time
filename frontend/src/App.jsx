@@ -24,6 +24,7 @@ import {
   getCategoriesForList,
 } from './helpers/selectors';
 import useApplicationData from "./hooks/useApplicationData.js";
+import useDynamicTheme from "./hooks/useDynamicTheme.js";
 import UserPage from './components/UserPage';
 import Gate from './components/Gate';
 import Debug from './components/Debug';
@@ -31,21 +32,12 @@ import Debug from './components/Debug';
 function App() {
   const { isLoggedIn, token, logout, user } = useContext(AuthContext);
   const [data, setData] = useState([]);
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const isStandAlone = useMediaQuery('(display-mode: standalone)');
   const [location, setLocation] = useLocation();
 
-  const [value, setValue] = useState(0);
+  const { theme, toggleColorMode } = useDynamicTheme();
 
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode: prefersDarkMode ? 'dark' : 'light',
-        },
-      }),
-    [prefersDarkMode],
-  );
+  const [value, setValue] = useState(0);
 
   const {
     state,
@@ -144,7 +136,7 @@ function App() {
           >
             <BottomNavigationAction value="/categories" label="Categories" icon={<CategoryIcon />} />
             <BottomNavigationAction value="/" label="Submit" icon={<HistoryEduIcon />} />
-            <BottomNavigationAction value="/" label="" icon={<CircleIcon fontSize='large' />} />
+            <BottomNavigationAction value="/" label="" icon={<CircleIcon fontSize='large' />} onClick={toggleColorMode}/>
             <BottomNavigationAction value="/archive" label="Data" icon={<TimelineIcon />} />
             <BottomNavigationAction value="/you" label="You" icon={<EngineeringIcon />} />
           </BottomNavigation>
