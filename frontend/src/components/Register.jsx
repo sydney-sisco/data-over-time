@@ -15,19 +15,19 @@ function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [location, setLocation] = useLocation();
+  const [error, setError] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    postRegister(username, password)
-      .then(res => {
-        if (res.status === 200) {
-          console.log('Registration successful');
-          setLocation("/login?registered=true");
-        } else {
-          console.log('Registration failed');
-        }
-      });
+    const res = await postRegister(username, password)
+    if (res.status === 200) {
+      console.log('Registration successful');
+      setLocation("/login?registered=true");
+    } else {
+      console.log('Registration failed');
+      setError(true);
+    }
   }
 
   return (
@@ -50,6 +50,12 @@ function Register() {
             </Avatar>
 
             <Typography component="h1" variant="h5">Create Account</Typography>
+
+            {error &&
+              <Typography component="p" variant="body2" sx={{color: 'red'}}>
+                Registration failed. Please try again.
+              </Typography>
+            }
 
             <TextField
               label="Username"
