@@ -127,6 +127,7 @@ function App() {
             showLabels
             value={value}
             onChange={(event, newValue) => {
+              setValue(newValue);
               setLocation(newValue);
             }}
             sx={isStandAlone?{mb: {
@@ -136,7 +137,7 @@ function App() {
           >
             <BottomNavigationAction value="/categories" label="Categories" icon={<CategoryIcon />} />
             <BottomNavigationAction value="/" label="Submit" icon={<HistoryEduIcon />} />
-            <BottomNavigationAction value="/" label="" icon={<CircleIcon fontSize='large' />} onClick={toggleColorMode}/>
+            <CircleIcon sx={{fontSize: '3.5rem'}} fontSize='large' onClick={toggleColorMode}/>
             <BottomNavigationAction value="/archive" label="Data" icon={<TimelineIcon />} />
             <BottomNavigationAction value="/you" label="You" icon={<EngineeringIcon />} />
           </BottomNavigation>
