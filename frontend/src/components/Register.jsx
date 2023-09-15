@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "wouter";
-import axios from "axios";
+import { postRegister } from "../apiService";
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -19,19 +19,13 @@ function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const data = {
-      username: username,
-      password: password,
-    }
-
-    // TODO: move this to AuthProvider
-    axios.post('/api/register', data)
+    postRegister(username, password)
       .then(res => {
         if (res.status === 200) {
           console.log('Registration successful');
-          // Handle successful registration here,
-          // you might want to redirect the user to the login page
-          setLocation("/login");
+          setLocation("/login?registered=true");
+        } else {
+          console.log('Registration failed');
         }
       });
   }
