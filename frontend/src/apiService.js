@@ -6,6 +6,7 @@ export async function postRegister(username, password) {
     return res;
   } catch (error) {
     console.error("Ah, crap! We hit an error, dude: ", error);
+    return error;
   }
 };
 
@@ -15,5 +16,6 @@ export async function postLogin(username, password) {
     return res;
   } catch (error) {
     console.error("Ah, crap! We hit an error, dude: ", error);
+    return error;
   }
 };

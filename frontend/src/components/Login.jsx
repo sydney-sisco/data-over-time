@@ -19,6 +19,7 @@ function Login() {
   const { login } = useContext(AuthContext);
   const params = new URLSearchParams(window.location.search);
   const registered = params.get('registered');
+  const [error, setError] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,6 +28,9 @@ function Login() {
     if (res.status === 200) {
       console.log('Login successful');
       login(res.data);
+    } else {
+      console.log('Login failed');
+      setError(true);
     }
   };
 
@@ -54,6 +58,12 @@ function Login() {
             {registered &&
               <Typography component="p" variant="body2" sx={{color: 'green'}}>
                 Registration successful! Please login.
+              </Typography>
+            }
+
+            {error &&
+              <Typography component="p" variant="body2" sx={{color: 'red'}}>
+                Login failed. Please try again.
               </Typography>
             }
 
