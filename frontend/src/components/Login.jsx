@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { AuthContext } from '../AuthProvider';
 import { Link } from "wouter";
-import axios from "axios";
+import { postLogin } from "../apiService";
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -17,17 +17,13 @@ function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useContext(AuthContext);
+  const params = new URLSearchParams(window.location.search);
+  const registered = params.get('registered');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = {
-      username,
-      password,
-    };
-
-    // TODO: move this to AuthProvider
-    const res = await axios.post('/api/login', data);
+    const res = await postLogin(username, password);
     if (res.status === 200) {
       console.log('Login successful');
       login(res.data);
@@ -54,6 +50,12 @@ function Login() {
             </Avatar>
 
             <Typography component="h1" variant="h5">Login</Typography>
+
+            {registered &&
+              <Typography component="p" variant="body2" sx={{color: 'green'}}>
+                Registration successful! Please login.
+              </Typography>
+            }
 
             <TextField
               label="Username"
