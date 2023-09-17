@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useLocation } from "wouter";
+import apiService from './apiService.js';
 
 // Create Context
 const AuthContext = React.createContext();
@@ -17,7 +18,6 @@ const AuthProvider = ({ children }) => {
       const base64Url = token.split('.')[1]; // We get the payload part of the JWT
       const base64 = base64Url.replace('-', '+').replace('_', '/'); // Convert Base64Url to Base64
       const payload = JSON.parse(window.atob(base64)); // Decode Base64 and parse the JSON result
-      console.log(payload.username); // should print your username
       return payload.username;
     } else {
       return null;
@@ -27,6 +27,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (token) {
       const username = getUsername(token);
+      apiService.setToken(token);
       setUser({username});
     } else {
       setUser(null);
@@ -35,6 +36,7 @@ const AuthProvider = ({ children }) => {
 
   const login = (data) => {
     setToken(data.token);
+    apiService.setToken(data.token);
     setLocation("/");
   };
 

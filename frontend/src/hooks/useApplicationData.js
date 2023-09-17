@@ -7,6 +7,7 @@ import reducer, {
   SET_CATEGORIES,
   ADD_ENTRY,
 } from "../reducers/application";
+import apiService from '../apiService';
 
 /*
 Complex state management lives here.
@@ -21,76 +22,20 @@ export default function useApplicationData() {
   const { isLoggedIn, token, logout } = useContext(AuthContext);
 
   const deleteCategory = async (id) => {
-
-    console.log('deleting category: ', id);
-    
-    try {
-      const res = await fetch(`/api/categories/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
-        },
-      });
-
-      if (res.status === 200) {
-        console.log('Category deleted successfully');
-
-        await dispatch({ type: SET_CATEGORY, id, category: null });
-      }
-    } catch (error) {
-      console.error("Ah, crap! We hit an error, dude: ", error);
+    const deletedCategory = await apiService.deleteCategory(id);
+  
+    if(deletedCategory) {
+      await dispatch({ type: SET_CATEGORY, id, category: null });
     }
-  };
+  }
 
   const saveCategory = async (id, category) => {
-    // const idToUse = id || await generateFakeId();
-    if(!id) {
-      try {
-        console.log('saving category: ', category, 'with id: ', id);
-        const res = await fetch('/api/categories', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-          },
-          body: JSON.stringify(category),
-        });
-
-        if (res.status === 200) {
-          const responseData = await res.json();
-          console.log('response from saveCategory: ', responseData.data);
-
-          await dispatch({ type: SET_CATEGORY, id: responseData.data.id, category: responseData.data });
-        }
-      }
-      catch (error) {
-        console.error("Ah, crap! We hit an error, dude: ", error);
-      }
-    } else {
-      try {
-        console.log('updating category: ', category, 'with id: ', id);
-        const res = await fetch(`/api/categories/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-          },
-          body: JSON.stringify(category),
-        });
-
-        if (res.status === 200) {
-          const responseData = await res.json();
-          console.log(responseData);
-
-          await dispatch({ type: SET_CATEGORY, id, category });
-        }
-      }
-      catch (error) {
-        console.error("Ah, crap! We hit an error, dude: ", error);
-      }
+    const returnedCategory = await apiService.saveCategory(id, category);
+    console.log('saved category: ', returnedCategory);
+    if(returnedCategory) {
+      await dispatch({ type: SET_CATEGORY, id: returnedCategory.id, category: returnedCategory });
     }
-  };
+  }
 
   const submitData = async (data) => {
     try {
