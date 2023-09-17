@@ -71,28 +71,10 @@ export default function useApplicationData() {
     }
   
     const getData = async () => {
-      try {
-        const res = await fetch('/api/data', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-          },
-        });
+      const entries = await api.getData();
 
-        // check for 401 or 403
-        if (res.status === 401 || res.status === 403) {
-          console.log('Unauthorized, logging out');
-          logout();
-          return;
-        }
-
-        if (res.status === 200) {
-          const responseData = await res.json();
-          // setData(responseData.data);
-          dispatch({ type: SET_ENTRIES_DATA, entries: responseData.data });
-        }
-      } catch (error) {
-        console.error("getData error: ", error);
+      if(entries) {
+        dispatch({ type: SET_ENTRIES_DATA, entries });
       }
     }
 

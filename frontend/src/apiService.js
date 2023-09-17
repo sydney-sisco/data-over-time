@@ -24,10 +24,16 @@ export async function postLogin(username, password) {
 class ApiService {
   constructor() {
     this.token = null;
+    this.onUnauthorizedCallback = null;
   }
 
   setToken(token) {
     this.token = token;
+  }
+
+  // TODO: set this to the logout function from AuthProvider
+  setOnUnauthorizedCallback(callback) {
+    this.onUnauthorizedCallback = callback;
   }
 
   async deleteCategory(id) {
@@ -118,7 +124,32 @@ class ApiService {
     }
   }
 
+  async getData() {
+    try {
+      const res = await fetch('/api/data', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.token,
+        },
+      });
 
+      // TODO: add this to all API calls that require authentication
+      if (res.status === 401 || res.status === 403) {
+        if (this.onUnauthorizedCallback) {
+          this.onUnauthorizedCallback();
+        }
+        return;
+      }
+
+      if (res.status === 200) {
+        const responseData = await res.json();
+        console.log('response from getData:', responseData);
+        return responseData.data;
+      }
+    } catch (error) {
+      console.error("getData error: ", error);
+    }
+  }
 
   // other API methods go here
 }
