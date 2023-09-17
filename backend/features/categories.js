@@ -130,8 +130,13 @@ const updateCategory = async (id, categoryObj, userId) => {
       .doc(id);
     await categoryRef.update(categoryObj);
     console.log('Category updated successfully');
+    return {
+      ...categoryObj,
+      id,
+    }
   } catch (error) {
     console.error('Error updating category:', error);
+    return null;
   }
 };
 
