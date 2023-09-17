@@ -132,13 +132,13 @@ class ApiService {
         },
       });
 
-      // TODO: add this to all API calls that require authentication
-      if (res.status === 401 || res.status === 403) {
-        if (this.onUnauthorizedCallback) {
-          this.onUnauthorizedCallback();
-        }
-        return;
-      }
+      // TODO: get something like this working
+      // if (res.status === 401 || res.status === 403) {
+      //   if (this.onUnauthorizedCallback) {
+      //     this.onUnauthorizedCallback();
+      //   }
+      //   return;
+      // }
 
       if (res.status === 200) {
         const responseData = await res.json();
