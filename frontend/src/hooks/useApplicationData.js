@@ -38,28 +38,10 @@ export default function useApplicationData() {
   }
 
   const submitData = async (data) => {
-    try {
-      const res = await fetch('/api/data', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
-        },
-        body: data ? JSON.stringify(data) : null,
-      });
+    const responseData = await api.submitData(data);
 
-      if (res.status === 200) {
-        console.log('Data posted successfully');
-
-        const responseData = await res.json();
-        console.log(responseData);
-
-        // setData((prevData) => [responseData.data, ...prevData]);
-        dispatch({ type: ADD_ENTRY, entry: responseData.data });
-
-      }
-    } catch (error) {
-      console.error("submitData error: ", error);
+    if(responseData) {
+      dispatch({ type: ADD_ENTRY, entry: responseData });
     }
   };
 
@@ -90,27 +72,6 @@ export default function useApplicationData() {
     getCategories();
 
   }, [isLoggedIn]);
-
-  // const setDay = (day) => dispatch({ type: SET_DAY, day });
-
-  // function bookInterview(id, interview) {
-  //   const appointment = {
-  //     ...state.appointments[id],
-  //     interview: { ...interview },
-  //   };
-
-  //   return axios
-  //     .put(`/api/appointments/${id}`, appointment)
-  //     .then((response) => {
-  //       dispatch({ type: SET_INTERVIEW, id, interview });
-  //     });
-  // }
-
-  // function cancelInterview(id) {
-  //   return axios.delete(`/api/appointments/${id}`).then((response) => {
-  //     dispatch({ type: SET_INTERVIEW, id, interview: null });
-  //   });
-  // }
 
   // useEffect(() => {
   //   var exampleSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);

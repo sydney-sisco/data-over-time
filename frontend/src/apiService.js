@@ -151,7 +151,29 @@ class ApiService {
     }
   }
 
-  // other API methods go here
+  async submitData(data) {
+    try {
+      const res = await fetch('/api/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.token,
+        },
+        body: data ? JSON.stringify(data) : null,
+      });
+
+      if (res.status === 200) {
+        console.log('Data posted successfully');
+        
+        const responseData = await res.json();
+        console.log(responseData);
+
+        return responseData.data;
+      }
+    } catch (error) {
+      console.error("submitData error: ", error);
+    }
+  }
 }
 
 // export a single instance
