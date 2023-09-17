@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { AuthContext } from '../AuthProvider';
 import { Link } from "wouter";
-import { postLogin } from "../apiService";
+import api from "../apiService";
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -24,7 +24,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await postLogin(username, password);
+    const res = await api.postLogin(username, password);
     if (res.status === 200) {
       console.log('Login successful');
       login(res.data);

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { postRegister } from "../apiService";
+import api from "../apiService";
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -20,7 +20,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await postRegister(username, password)
+    const res = await api.postRegister(username, password)
     if (res.status === 200) {
       console.log('Registration successful');
       setLocation("/login?registered=true");

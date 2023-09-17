@@ -1,26 +1,5 @@
 import axios from "axios";
 
-export async function postRegister(username, password) {
-  try {
-    const res = await axios.post('/api/register', { username, password });
-    return res;
-  } catch (error) {
-    console.error("postRegister error: ", error);
-    return error;
-  }
-};
-
-export async function postLogin(username, password) {
-  try {
-    const res = await axios.post('/api/login', { username, password });
-    return res;
-  } catch (error) {
-    console.error("postLogin error: ", error);
-    return error;
-  }
-};
-
-// apiService.js
 class ApiService {
   constructor() {
     this.token = null;
@@ -35,6 +14,26 @@ class ApiService {
   setOnUnauthorizedCallback(callback) {
     this.onUnauthorizedCallback = callback;
   }
+
+  async postLogin(username, password) {
+    try {
+      const res = await axios.post('/api/login', { username, password });
+      return res;
+    } catch (error) {
+      console.error("postLogin error: ", error);
+      return error;
+    }
+  };
+
+  async postRegister(username, password) {
+    try {
+      const res = await axios.post('/api/register', { username, password });
+      return res;
+    } catch (error) {
+      console.error("postRegister error: ", error);
+      return error;
+    }
+  };
 
   async deleteCategory(id) {
     console.log('deleting category: ', id);
