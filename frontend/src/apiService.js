@@ -5,7 +5,7 @@ export async function postRegister(username, password) {
     const res = await axios.post('/api/register', { username, password });
     return res;
   } catch (error) {
-    console.error("Ah, crap! We hit an error, dude: ", error);
+    console.error("postRegister error: ", error);
     return error;
   }
 };
@@ -15,7 +15,7 @@ export async function postLogin(username, password) {
     const res = await axios.post('/api/login', { username, password });
     return res;
   } catch (error) {
-    console.error("Ah, crap! We hit an error, dude: ", error);
+    console.error("postLogin error: ", error);
     return error;
   }
 };
@@ -47,7 +47,7 @@ class ApiService {
         return res.json();
       }
     } catch (error) {
-      console.error("Ah, shit! We hit an error, dude: ", error);
+      console.error("deleteCategory error: ", error);
     }
   }
 
@@ -72,7 +72,7 @@ class ApiService {
         }
       }
       catch (error) {
-        console.error("Ah, fuck! We hit an error, dude: ", error);
+        console.error("saveCategory (saving new) error: ", error);
       }
     } else {
       try {
@@ -94,10 +94,31 @@ class ApiService {
         }
       }
       catch (error) {
-        console.error("Ah, fuck! We hit an error, dude: ", error);
+        console.error("saveCategory (editing existing) error: ", error);
       }
     }
   }
+
+  async getCategories() {
+    try {
+      const res = await fetch('/api/categories', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.token,
+        },
+      });
+
+      if (res.status === 200) {
+        const responseData = await res.json();
+        console.log('response from getCategories:', responseData);
+        return responseData.data;
+      }
+    } catch (error) {
+      console.error("getCategories error: ", error);
+    }
+  }
+
+
 
   // other API methods go here
 }

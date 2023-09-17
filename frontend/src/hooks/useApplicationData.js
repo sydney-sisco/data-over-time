@@ -7,7 +7,7 @@ import reducer, {
   SET_CATEGORIES,
   ADD_ENTRY,
 } from "../reducers/application";
-import apiService from '../apiService';
+import api from '../apiService';
 
 /*
 Complex state management lives here.
@@ -22,7 +22,7 @@ export default function useApplicationData() {
   const { isLoggedIn, token, logout } = useContext(AuthContext);
 
   const deleteCategory = async (id) => {
-    const deletedCategory = await apiService.deleteCategory(id);
+    const deletedCategory = await api.deleteCategory(id);
   
     if(deletedCategory) {
       await dispatch({ type: SET_CATEGORY, id, category: null });
@@ -30,8 +30,8 @@ export default function useApplicationData() {
   }
 
   const saveCategory = async (id, category) => {
-    const returnedCategory = await apiService.saveCategory(id, category);
-    console.log('saved category: ', returnedCategory);
+    const returnedCategory = await api.saveCategory(id, category);
+
     if(returnedCategory) {
       await dispatch({ type: SET_CATEGORY, id: returnedCategory.id, category: returnedCategory });
     }
@@ -59,7 +59,7 @@ export default function useApplicationData() {
 
       }
     } catch (error) {
-      console.error("Ah, crap! We hit an error, dude: ", error);
+      console.error("submitData error: ", error);
     }
   };
 
@@ -92,26 +92,15 @@ export default function useApplicationData() {
           dispatch({ type: SET_ENTRIES_DATA, entries: responseData.data });
         }
       } catch (error) {
-        console.error("Ah, crap! We hit an error, dude: ", error);
+        console.error("getData error: ", error);
       }
     }
 
     const getCategories = async () => {
-      try {
-        const res = await fetch('/api/categories', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-          },
-        });
+      const categories = await api.getCategories();
 
-        if (res.status === 200) {
-          const responseData = await res.json();
-          console.log("setting categories: ", responseData.data);
-          dispatch({ type: SET_CATEGORIES, categories: responseData.data });
-        }
-      } catch (error) {
-        console.error("Ah, crap! We hit an error, dude: ", error);
+      if(categories) {
+        dispatch({ type: SET_CATEGORIES, categories });
       }
     }
 
