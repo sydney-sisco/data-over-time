@@ -28,6 +28,7 @@ const AuthProvider = ({ children }) => {
     if (token) {
       const username = getUsername(token);
       apiService.setToken(token);
+      apiService.setOnUnauthorizedCallback(logout);
       setUser({username});
     } else {
       setUser(null);

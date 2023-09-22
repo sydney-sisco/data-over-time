@@ -10,7 +10,6 @@ class ApiService {
     this.token = token;
   }
 
-  // TODO: set this to the logout function from AuthProvider
   setOnUnauthorizedCallback(callback) {
     this.onUnauthorizedCallback = callback;
   }
@@ -133,12 +132,12 @@ class ApiService {
       });
 
       // TODO: get something like this working
-      // if (res.status === 401 || res.status === 403) {
-      //   if (this.onUnauthorizedCallback) {
-      //     this.onUnauthorizedCallback();
-      //   }
-      //   return;
-      // }
+      if (res.status === 401 || res.status === 403) {
+        if (this.onUnauthorizedCallback) {
+          this.onUnauthorizedCallback();
+        }
+        return;
+      }
 
       if (res.status === 200) {
         const responseData = await res.json();
@@ -160,6 +159,13 @@ class ApiService {
         },
         body: data ? JSON.stringify(data) : null,
       });
+
+      if (res.status === 401 || res.status === 403) {
+        if (this.onUnauthorizedCallback) {
+          this.onUnauthorizedCallback();
+        }
+        return;
+      }
 
       if (res.status === 200) {
         console.log('Data posted successfully');
