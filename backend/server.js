@@ -271,10 +271,10 @@ app.use(express.static(path.join(__dirname, 'public'), {
 
 // Serve your React app at the root path
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html', {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'), {
     etag: false,
     lastModified: false,
-  }));
+  });
 });
 
 const server = app.listen(port, () => {
