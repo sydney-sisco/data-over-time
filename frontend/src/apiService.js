@@ -123,6 +123,11 @@ class ApiService {
   }
 
   async getData() {
+    if(!this.token) {
+      console.log('no token!!!');
+      return;
+    }
+
     try {
       const res = await fetch('/api/data', {
         headers: {
@@ -131,7 +136,6 @@ class ApiService {
         },
       });
 
-      // TODO: get something like this working
       if (res.status === 401 || res.status === 403) {
         if (this.onUnauthorizedCallback) {
           this.onUnauthorizedCallback();
