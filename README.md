@@ -1,20 +1,6 @@
-# webapp-template
+# Data over Time
 
-A starting point.
-
-React frontend, Express backend.
-
-Out of the box features:
-- Socket.io connection
-- VSCode debugging for backend
-- Easily deployable to Google Cloud Run
-
-
-## Development
-
-Uses Node v18
-
-Node versions [here](https://nodejs.dev/en/about/releases/)
+Easy data tracking.
 
 ### Deployment
 
@@ -57,19 +43,16 @@ Express. Nodemon for development.
 
 Listens on [port 3001](http://localhost:3001) 
 
-### Backend Dependencies
-
-- express
-- dotenv
-- socket.io
-
-### Dev dependencies
-
-- nodemon
-
 ### Generating secrets
 
 For sessions you will need to define 2 env vars: `SESSION_SECRET` and `JWT_SECRET`. Generate random secrets using nodejs like this:
 ```js
 crypto.randomBytes(64).toString('hex');
 ```
+
+### launching chrome in debug mode
+`flatpak run com.google.Chrome --remote-debugging-port=9222 --user-data-dir=remote-debug-profile`
+
+
+### launching firebase emulator
+`firebase emulators:start --project demo-test`
