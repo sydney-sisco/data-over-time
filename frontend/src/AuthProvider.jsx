@@ -9,7 +9,7 @@ const AuthContext = React.createContext();
 // AuthProvider Component that wraps your app in App.js
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useLocalStorage("token", null);
-  const isLoggedIn = !!token;
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [location, setLocation] = useLocation();
   const [user, setUser] = useState(null);
 
@@ -30,14 +30,16 @@ const AuthProvider = ({ children }) => {
       apiService.setToken(token);
       apiService.setOnUnauthorizedCallback(logout);
       setUser({username});
+      setIsLoggedIn(true);
     } else {
       setUser(null);
+      setIsLoggedIn(false);
     }
   }, [token]);
 
   const login = (data) => {
-    setToken(data.token);
     apiService.setToken(data.token);
+    setToken(data.token);
     setLocation("/");
   };
 
