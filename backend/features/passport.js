@@ -55,7 +55,13 @@ module.exports = (app) => {
 
         const token = jwt.sign({ username: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
 
-        return res.status(200).json({ success: true, user, token });
+        const userObj = {
+          id: user.id,
+          username: user.data()['username'],
+          // preferences: user.data()['preferences'], //TODO: implement or remove
+        };
+
+        return res.status(200).json({ success: true, user: userObj, token });
       });
     })(req, res, next);
   });
